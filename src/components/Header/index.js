@@ -13,7 +13,15 @@ import {setLocale as setLocaleAction} from 'src/actions/userLocale'
 import {FormattedMessage} from 'react-intl'
 
 // Material-ui Components
-import {Toolbar, Button, FontIcon, Select, MenuItem, Hidden, Drawer} from 'material-ui'
+import {
+    Toolbar,
+    Button,
+    FontIcon,
+    Select,
+    MenuItem,
+    Hidden,
+    Drawer,
+} from 'material-ui'
 // Material-ui Icons
 import List from 'material-ui-icons/List'
 import Search from 'material-ui-icons/Search'
@@ -26,95 +34,129 @@ import Person from 'material-ui-icons/Person'
 import {Link} from 'react-router-dom'
 import CONSTANTS from '../../constants'
 
-import cityOfHelsinkiLogo from '../../assets/images/helsinki-logo.svg'
+import cityOfEspooLogo from '../../assets/images/espoo-logo.svg'
 
 class HeaderBar extends React.Component {
     state = {
         navBarOpen: false,
     }
 
-    changeLanguage = (e) => {
+    changeLanguage = e => {
         this.props.setLocale(e.target.value)
     }
 
     toggleNavbar = () => {
-        this.setState({navBarOpen: !this.state.navBarOpen});
+        this.setState({navBarOpen: !this.state.navBarOpen})
     }
 
-    getNavigateMobile = (navigate) => () => {
-        navigate();
-        this.toggleNavbar();
+    getNavigateMobile = navigate => () => {
+        navigate()
+        this.toggleNavbar()
     }
 
     render() {
-        const {user, routerPush, logout, login, location} = this.props 
+        const {user, routerPush, logout, login, location} = this.props
         const languages = CONSTANTS.APPLICATION_SUPPORT_TRANSLATION
 
-        const toMainPage = () => routerPush('/');
-        const toSearchPage = () => routerPush('/search');
-        const toHelpPage = () => routerPush('/help');
+        const toMainPage = () => routerPush('/')
+        const toSearchPage = () => routerPush('/search')
+        const toHelpPage = () => routerPush('/help')
 
-        const isInsideForm = location.pathname.startsWith('/event/create/new');
+        const isInsideForm = location.pathname.startsWith('/event/create/new')
 
         return (
             <div className="main-navbar">
                 <Toolbar className="helsinki-bar">
                     <div className="helsinki-bar__logo">
                         <Link to="/">
-                            <img src={cityOfHelsinkiLogo} alt="City Of Helsinki" />
+                            <img src={cityOfEspooLogo} alt="City Of Espoo" />
                         </Link>
                     </div>
                     <div className="helsinki-bar__login-button">
                         <div className="helsinki-bar__language-button">
                             <div className="language-selector">
-                                <Language className="language-icon"/>
+                                <Language className="language-icon" />
                                 <Select
                                     className="language-select-box"
                                     value={this.props.userLocale.locale}
-                                    onChange={this.changeLanguage}
-                                >
+                                    onChange={this.changeLanguage}>
                                     {languages.map((lang, index) => (
-                                        <MenuItem 
-                                            value={lang} 
-                                            key={index}>
+                                        <MenuItem value={lang} key={index}>
                                             {lang}
                                         </MenuItem>
                                     ))}
-                                </Select> 
-                            </div>  
+                                </Select>
+                            </div>
                         </div>
-                        {user ? 
-                            <Button onClick={() => logout()}>{user.displayName}</Button> :
-                            <Button onClick={() => login()}><Person/><FormattedMessage id="login"/></Button>}
+                        {user ? (
+                            <Button onClick={() => logout()}>
+                                {user.displayName}
+                            </Button>
+                        ) : (
+                            <Button onClick={() => login()}>
+                                <Person />
+                                <FormattedMessage id="login" />
+                            </Button>
+                        )}
                     </div>
                 </Toolbar>
-                
+
                 <Toolbar className="linked-events-bar">
-                    <div className="linked-events-bar__logo" onClick={() => routerPush('/')}><FormattedMessage id={`linked-${appSettings.ui_mode}`} /></div>
+                    <div
+                        className="linked-events-bar__logo"
+                        onClick={() => routerPush('/')}>
+                        <FormattedMessage
+                            id={`linked-${appSettings.ui_mode}`}
+                        />
+                    </div>
                     <div className="linked-events-bar__links">
                         <Hidden smDown>
                             <div className="linked-events-bar__links__list">
-                                <NavLinks toMainPage={toMainPage} toSearchPage={toSearchPage} toHelpPage={toHelpPage} />
+                                <NavLinks
+                                    toMainPage={toMainPage}
+                                    toSearchPage={toSearchPage}
+                                    toHelpPage={toHelpPage}
+                                />
                             </div>
                         </Hidden>
                         <div />
                         <div className="linked-events-bar__links__mobile">
                             {!isInsideForm && (
-                                <Button className="linked-events-bar__links__create-events" onClick={() => routerPush('/event/create/new')}>
-                                    <Add/>
-                                    <FormattedMessage id={`create-${appSettings.ui_mode}`}/>
+                                <Button
+                                    className="linked-events-bar__links__create-events"
+                                    onClick={() =>
+                                        routerPush('/event/create/new')
+                                    }>
+                                    <Add />
+                                    <FormattedMessage
+                                        id={`create-${appSettings.ui_mode}`}
+                                    />
                                 </Button>
                             )}
                             <Hidden mdUp>
-                                <MenuIcon className="linked-events-bar__icon" onClick={this.toggleNavbar} />
-                                <Drawer anchor='right' open={this.state.navBarOpen} ModalProps={{onBackdropClick: this.toggleNavbar}}>
+                                <MenuIcon
+                                    className="linked-events-bar__icon"
+                                    onClick={this.toggleNavbar}
+                                />
+                                <Drawer
+                                    anchor="right"
+                                    open={this.state.navBarOpen}
+                                    ModalProps={{
+                                        onBackdropClick: this.toggleNavbar,
+                                    }}>
                                     <div className="menu-drawer-mobile">
                                         <NavLinks
-                                            toMainPage={this.getNavigateMobile(toMainPage)}
-                                            toSearchPage={this.getNavigateMobile(toSearchPage)}
-                                            toHelpPage={this.getNavigateMobile(toHelpPage)}
+                                            toMainPage={this.getNavigateMobile(
+                                                toMainPage
+                                            )}
+                                            toSearchPage={this.getNavigateMobile(
+                                                toSearchPage
+                                            )}
+                                            toHelpPage={this.getNavigateMobile(
+                                                toHelpPage
+                                            )}
                                         />
-                                    </div> 
+                                    </div>
                                 </Drawer>
                             </Hidden>
                         </div>
@@ -125,16 +167,23 @@ class HeaderBar extends React.Component {
     }
 }
 
-const NavLinks = (props) => {
-    const {toMainPage, toSearchPage, toHelpPage} = props;
+const NavLinks = props => {
+    const {toMainPage, toSearchPage, toHelpPage} = props
     return (
         <React.Fragment>
-            <Button onClick={toMainPage}><FormattedMessage id={`${appSettings.ui_mode}-management`}/></Button>
-            <Button onClick={toSearchPage}><FormattedMessage id={`search-${appSettings.ui_mode}`}/></Button>
-            <Button onClick={toHelpPage}> <FormattedMessage id="more-info"/></Button>
+            <Button onClick={toMainPage}>
+                <FormattedMessage id={`${appSettings.ui_mode}-management`} />
+            </Button>
+            <Button onClick={toSearchPage}>
+                <FormattedMessage id={`search-${appSettings.ui_mode}`} />
+            </Button>
+            <Button onClick={toHelpPage}>
+                {' '}
+                <FormattedMessage id="more-info" />
+            </Button>
         </React.Fragment>
-    );
-};
+    )
+}
 
 NavLinks.propTypes = {
     toMainPage: PropTypes.func,
@@ -153,16 +202,21 @@ HeaderBar.propTypes = {
     location: PropTypes.object,
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     user: state.user,
     userLocale: state.userLocale,
 })
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     login: () => dispatch(loginAction()),
     logout: () => dispatch(logoutAction()),
-    routerPush: (url) => dispatch(push(url)),
-    setLocale: (locale) => dispatch(setLocaleAction(locale)),
+    routerPush: url => dispatch(push(url)),
+    setLocale: locale => dispatch(setLocaleAction(locale)),
 })
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HeaderBar))
+export default withRouter(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(HeaderBar)
+)
