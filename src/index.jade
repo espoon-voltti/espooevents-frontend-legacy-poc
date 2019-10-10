@@ -3,7 +3,7 @@ html.no-js
     head
         meta(charset='utf-8')
         meta(http-equiv='X-UA-Compatible', content='IE=edge')
-        - var instanceName = ui_mode === 'courses' ? 'Linked Courses' : 'Linked Events'
+        - var instanceName = ui_mode === 'courses' ? 'Linked Courses' : 'Espoo Events'
         title #{instanceName} UI
         meta(name='description', content='')
         meta(name='viewport', content='width=device-width, initial-scale=1')
@@ -31,4 +31,4 @@ html.no-js
             #debughelper
         if APP_MODE == 'development'
             script(src="/scripts/main.js", type="text/javascript")
-        
+
