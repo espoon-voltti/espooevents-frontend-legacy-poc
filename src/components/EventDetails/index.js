@@ -44,7 +44,7 @@ let MultiLanguageValue = (props) => {
     }
 
     // Use a separate array to ensure correct field order
-    let langOptions = ['fi', 'sv', 'en', 'ru', 'zh_hans', 'ar']
+    let langOptions = ['fi', 'sv', 'en']
     let elements = []
 
     _.each(langOptions, (key) => {
@@ -146,14 +146,14 @@ let DateTime = (props) => {
         let value = ''
         if(time.isValid()) {
             value = <div>
-                <FormattedDate 
+                <FormattedDate
                     value={time}
                     year="numeric"
                     month="short"
                     day="numeric"
                     weekday="long"
-                /> 
-                <FormattedTime 
+                />
+                <FormattedTime
                     value={time}
                     hour="numeric"
                     minute="2-digit"
@@ -226,7 +226,7 @@ class EventDetails extends React.Component {
         let helfiCategories = _.map(props.values.hel_main, (id) => (
             _.find(props.rawData.keywords, (item) => (id.indexOf(item['@id']) > -1))
         ))
-        
+
         return (
             <div>
                 <ImageValue labelKey="event-image" value={props.values['image']}/>
@@ -337,7 +337,7 @@ class EventDetails extends React.Component {
 
 NoValue.propTypes = {
     labelKey: PropTypes.string,
-} 
+}
 
 CheckedValue.propTypes = {
     checked: PropTypes.bool,
