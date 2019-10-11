@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Route} from 'react-router'
 
-import {Link, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import createHistory from 'history/createBrowserHistory' //'history/createHashHistory'
 
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
@@ -12,7 +12,6 @@ import {
     ConnectedRouter,
     routerReducer,
     routerMiddleware,
-    push,
 } from 'react-router-redux'
 
 import thunk from 'redux-thunk'
