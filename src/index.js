@@ -33,7 +33,7 @@ import Serializer from './actors/serializer';
 import {report} from './utils/raven_reporter';
 import {Modal, Button, Glyphicon} from 'react-bootstrap';
 
-// translation 
+// translation
 import IntlProviderWrapper from './components/IntlProviderWrapper'
 
 const history = createHistory()
@@ -61,120 +61,127 @@ store.subscribe(_.bind(Serializer, null, store));
 
 const LayoutContainer = withRouter(connect()(App));
 
-ReactDOM.render(
-    <Provider store={store}>
+const Container = () =>
+{
+    // return <Login />
+    // authenticate() ? <Login /> :
+    return <Provider store={store}>
         <IntlProviderWrapper>
             <ConnectedRouter history={history}>
                 <LayoutContainer>
-                    <Route exact path="/" component={EventListingPage}/>
-                    <Route exact path="/event/:eventId" component={Event}/>
-                    <Route exact path="/event/:action/:eventId" component={Editor}/>
-                    <Route exact path="/event/done/:action/:eventId" component={EventCreated}/>
-                    <Route exact path="/search" component={Search}/>
-                    <Route exact path="/help" component={Help}/>
+                    <Route exact path="/" component={EventListingPage} />
+                    <Route exact path="/event/:eventId" component={Event} />
+                    <Route exact path="/event/:action/:eventId" component={Editor} />
+                    <Route exact path="/event/done/:action/:eventId" component={EventCreated} />
+                    <Route exact path="/search" component={Search} />
+                    <Route exact path="/help" component={Help} />
                 </LayoutContainer>
             </ConnectedRouter>
         </IntlProviderWrapper>
-    </Provider>,
-    document.getElementById('content')
-)
-
-class DebugReporterModal extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {value: ''}
-
-        this.handleChange = this.handleChange.bind(this)
-        this.report = this.report.bind(this)
-    }
-
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-
-    report() {
-        this.props.sendReport(this.state.value);
-    }
-
-    render() {
-        return <div id="debugreporterform">
-            <Modal show={this.props.showModal} onHide={this.props.close}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Raportoi virhetilanne</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <div>
-                        <p>Kuvaile ongelmaa halutessasi</p>
-                        <p><textarea cols="40" rows="10" onChange={this.handleChange} value={this.state.value} /></p>
-                        <p><button onClick={this.report}>Lähetä raportti</button></p>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={this.props.close}>Sulje</Button>
-                    <div style={{fontSize: '80%', margin: '0.5em'}}>
-                        Sovelluksen versiotunniste: {appSettings.commit_hash}
-                    </div>
-                </Modal.Footer>
-            </Modal>
-        </div>
-    }
-}
-
-DebugReporterModal.propTypes = {
-    sendReport: PropTypes.func,
-    showModal: PropTypes.bool,
-    close: PropTypes.func,
-}
-
-class DebugHelper extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {reporting: false}
-
-        this.showReportForm = this.showReportForm.bind(this)
-        this.closeReportForm = this.closeReportForm.bind(this)
-        this.serializeState = this.serializeState.bind(this)
-    }
-
-    showReportForm() {
-        this.setState({reporting: true})
-    }
-
-    closeReportForm() {
-        this.setState({reporting: false})
-    }
-
-    serializeState(reportmsg) {
-        window.ARG.debug_message = reportmsg;
-        window.ARG.commit_hash = appSettings.commit_hash;
-        this.closeReportForm();
-        report(JSON.stringify(window.ARG));
-
-        window.setTimeout(
-            () => alert('Raportti lähetetty, kiitoksia'),
-            100);
-
-    }
-
-    render() {
-        return <div>
-            <DebugReporterModal showModal={this.state.reporting} close={this.closeReportForm} sendReport={this.serializeState} />
-            <div id="debughelper">
-                <div id="debughelper_container">
-                    <Button bsSize="large" onClick={this.showReportForm}>
-                        <i className="material-icons">feedback</i>
-                    </Button>
-                </div>
-                <div id="slide">Jos tapahtumien hallinnassa tai syöttölomakkeen toiminnassa on virhe, klikkaa {`"raportoi virhe"`}&#x2011;nappia,
-                    niin saamme virhetilanteesta tiedon ja voimme tutkia asiaa.</div>
-            </div>
-        </div>
-    }
-
+    </Provider>
 }
 
 ReactDOM.render(
-    <div>
-        <DebugHelper />
-    </div>,
-    document.getElementById('debughelper'));
+    <Container />,
+    document.getElementById('content')
+)
+
+// class DebugReporterModal extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {value: ''}
+
+//         this.handleChange = this.handleChange.bind(this)
+//         this.report = this.report.bind(this)
+//     }
+
+//     handleChange(event) {
+//         this.setState({value: event.target.value});
+//     }
+
+//     report() {
+//         this.props.sendReport(this.state.value);
+//     }
+
+//     render() {
+//         return <div id="debugreporterform">
+//             <Modal show={this.props.showModal} onHide={this.props.close}>
+//                 <Modal.Header closeButton>
+//                     <Modal.Title>Raportoi virhetilanne</Modal.Title>
+//                 </Modal.Header>
+//                 <Modal.Body>
+//                     <div>
+//                         <p>Kuvaile ongelmaa halutessasi</p>
+//                         <p><textarea cols="40" rows="10" onChange={this.handleChange} value={this.state.value} /></p>
+//                         <p><button onClick={this.report}>Lähetä raportti</button></p>
+//                     </div>
+//                 </Modal.Body>
+//                 <Modal.Footer>
+//                     <Button onClick={this.props.close}>Sulje</Button>
+//                     <div style={{fontSize: '80%', margin: '0.5em'}}>
+//                         Sovelluksen versiotunniste: {appSettings.commit_hash}
+//                     </div>
+//                 </Modal.Footer>
+//             </Modal>
+//         </div>
+//     }
+// }
+
+// DebugReporterModal.propTypes = {
+//     sendReport: PropTypes.func,
+//     showModal: PropTypes.bool,
+//     close: PropTypes.func,
+// }
+
+// class DebugHelper extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {reporting: false}
+
+//         this.showReportForm = this.showReportForm.bind(this)
+//         this.closeReportForm = this.closeReportForm.bind(this)
+//         this.serializeState = this.serializeState.bind(this)
+//     }
+
+//     showReportForm() {
+//         this.setState({reporting: true})
+//     }
+
+//     closeReportForm() {
+//         this.setState({reporting: false})
+//     }
+
+//     serializeState(reportmsg) {
+//         window.ARG.debug_message = reportmsg;
+//         window.ARG.commit_hash = appSettings.commit_hash;
+//         this.closeReportForm();
+//         report(JSON.stringify(window.ARG));
+
+//         window.setTimeout(
+//             () => alert('Raportti lähetetty, kiitoksia'),
+//             100);
+
+//     }
+
+//     render() {
+//         return <div>
+//             <DebugReporterModal showModal={this.state.reporting} close={this.closeReportForm} sendReport={this.serializeState} />
+//             <div id="debughelper">
+//                 <div id="debughelper_container">
+//                     <Button bsSize="large" onClick={this.showReportForm}>
+//                         <i className="material-icons">feedback</i>
+//                     </Button>
+//                 </div>
+//                 <div id="slide">Jos tapahtumien hallinnassa tai syöttölomakkeen toiminnassa on virhe, klikkaa {`"raportoi virhe"`}&#x2011;nappia,
+//                     niin saamme virhetilanteesta tiedon ja voimme tutkia asiaa.</div>
+//             </div>
+//         </div>
+//     }
+
+// }
+
+// ReactDOM.render(
+//     <div>
+//         <DebugHelper />
+//     </div>,
+//     document.getElementById('debughelper'));
