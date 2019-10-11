@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch'
-import moment from 'moment';
-import {includes, keys, pickBy} from 'lodash';
+import moment from 'moment'
+import {includes, keys, pickBy} from 'lodash'
 
 import constants from '../constants'
 import {
@@ -15,7 +15,7 @@ import {push} from 'react-router-redux'
 import {setFlashMsg, confirmAction} from './app'
 
 import {doValidations} from 'src/validation/validator.js'
-import {fetchSubEventsForSuper} from './subEvents';
+import {fetchSubEventsForSuper} from './subEvents'
 
 /**
  * Set editor form data
@@ -96,10 +96,15 @@ export function replaceData(formData) {
     return (dispatch, getState) => {
         const {contentLanguages} = getState().editor
         let formObject = mapAPIDataToUIFormat(formData)
-        const publicationStatus = formObject.publication_status || constants.PUBLICATION_STATUS.PUBLIC
+        const publicationStatus =
+            formObject.publication_status || constants.PUBLICATION_STATUS.PUBLIC
 
         // run the validation before copy to a draft
-        const validationErrors = doValidations(formObject, contentLanguages, publicationStatus)
+        const validationErrors = doValidations(
+            formObject,
+            contentLanguages,
+            publicationStatus
+        )
 
         // empty id, event_status, and any field that has validation errors
         keys(validationErrors).map(field => {
@@ -108,7 +113,7 @@ export function replaceData(formData) {
         delete formObject.id
         delete formObject.event_status
         delete formObject.super_event_type
-        
+
         dispatch(validateFor(publicationStatus))
         dispatch(setValidationErrors({}))
         dispatch({
@@ -132,7 +137,7 @@ export function clearData() {
  * @param {obj} errors
  */
 export function setValidationErrors(errors) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({
             type: constants.SET_VALIDATION_ERRORS,
             errors: errors,
@@ -141,7 +146,10 @@ export function setValidationErrors(errors) {
 }
 
 export function validateFor(publicationStatus) {
-    if(publicationStatus === constants.PUBLICATION_STATUS.PUBLIC || publicationStatus === constants.PUBLICATION_STATUS.DRAFT) {
+    if (
+        publicationStatus === constants.PUBLICATION_STATUS.PUBLIC ||
+        publicationStatus === constants.PUBLICATION_STATUS.DRAFT
+    ) {
         return {
             type: constants.VALIDATE_FOR,
             validateFor: publicationStatus,
@@ -163,20 +171,41 @@ export function validateFor(publicationStatus) {
  * @return {[type]}                         [description]
  */
 
-const multiLanguageFields = ['name', 'description', 'short_description', 'provider', 'location_extra_info']
+const multiLanguageFields = [
+    'name',
+    'description',
+    'short_description',
+    'provider',
+    'location_extra_info',
+]
 
-const prepareFormValues = (formValues, contentLanguages, user, updateExisting, publicationStatus, dispatch) => {
+const prepareFormValues = (
+    formValues,
+    contentLanguages,
+    user,
+    updateExisting,
+    publicationStatus,
+    dispatch,
+    apikey
+) => {
     // exclude all existing sub events from editing form
     if (updateExisting) {
-        formValues.sub_events = pickBy(formValues.sub_events, event => !event['@id'])
+        formValues.sub_events = pickBy(
+            formValues.sub_events,
+            event => !event['@id']
+        )
     }
     dispatch({type: constants.EDITOR_SENDDATA})
-    let recurring = false;
-    if(formValues.sub_events) {
+    let recurring = false
+    if (formValues.sub_events) {
         recurring = keys(formValues.sub_events).length > 0
     }
     // Run validations
-    let validationErrors = doValidations(formValues, contentLanguages, publicationStatus)
+    let validationErrors = doValidations(
+        formValues,
+        contentLanguages,
+        publicationStatus
+    )
 
     // There are validation errors, don't continue sending
     if (keys(validationErrors).length > 0) {
@@ -203,8 +232,14 @@ const prepareFormValues = (formValues, contentLanguages, user, updateExisting, p
     const descriptionTexts = formValues.description
     for (const lang in formValues.description) {
         if (formValues.description[lang]) {
-            const desc = formValues.description[lang].replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br/>').replace(/&/g, '&amp;')
-            if (desc.indexOf('<p>') === 0 && desc.substr(desc.length - 4) === '</p>') {
+            const desc = formValues.description[lang]
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br/>')
+                .replace(/&/g, '&amp;')
+            if (
+                desc.indexOf('<p>') === 0 &&
+                desc.substr(desc.length - 4) === '</p>'
+            ) {
                 descriptionTexts[lang] = desc
             } else {
                 descriptionTexts[lang] = `<p>${desc}</p>`
@@ -212,19 +247,40 @@ const prepareFormValues = (formValues, contentLanguages, user, updateExisting, p
         }
     }
     // Check for 'palvelukeskuskortti' in audience
-    if (formValues.audience && includes(formValues.audience, `${appSettings.api_base}/keyword/helsinki:aflfbat76e/`)) {
-        const specialDescription = '<p>Tapahtuma on tarkoitettu vain eläkeläisille ja työttömille, joilla on <a href="https://www.hel.fi/sote/fi/palvelut/palvelukuvaus?id=3252" target="_blank">palvelukeskuskortti</a>.</p>'
-        if (formValues.description && formValues.description.fi && descriptionTexts.fi) {
-            if (!includes(formValues.description.fi, 'https://www.hel.fi/sote/fi/palvelut/palvelukuvaus?id=3252')) { // Don't repeat insertion
-                descriptionTexts.fi = specialDescription + formValues.description.fi
+    if (
+        formValues.audience &&
+        includes(
+            formValues.audience,
+            `${appSettings.api_base}/keyword/helsinki:aflfbat76e/`
+        )
+    ) {
+        const specialDescription =
+            '<p>Tapahtuma on tarkoitettu vain eläkeläisille ja työttömille, joilla on <a href="https://www.hel.fi/sote/fi/palvelut/palvelukuvaus?id=3252" target="_blank">palvelukeskuskortti</a>.</p>'
+        if (
+            formValues.description &&
+            formValues.description.fi &&
+            descriptionTexts.fi
+        ) {
+            if (
+                !includes(
+                    formValues.description.fi,
+                    'https://www.hel.fi/sote/fi/palvelut/palvelukuvaus?id=3252'
+                )
+            ) {
+                // Don't repeat insertion
+                descriptionTexts.fi =
+                    specialDescription + formValues.description.fi
             }
         } else {
             descriptionTexts.fi = specialDescription
         }
     }
 
-    let data = Object.assign({}, formValues, multiLanguageValues, {publication_status: publicationStatus, description: descriptionTexts})
-    
+    let data = Object.assign({}, formValues, multiLanguageValues, {
+        publication_status: publicationStatus,
+        description: descriptionTexts,
+    })
+
     // specific processing for event with multiple dates
     if (recurring) {
         data = combineSubEventsFromEditor(data, updateExisting)
@@ -239,28 +295,48 @@ const prepareFormValues = (formValues, contentLanguages, user, updateExisting, p
     return mapUIDataToAPIFormat(data)
 }
 
-const executeSendRequest = (formValues, contentLanguages, user, updateExisting, publicationStatus) => {
+const executeSendRequest = (
+    formValues,
+    contentLanguages,
+    user,
+    updateExisting,
+    publicationStatus
+) => {
     return (dispatch, getState) => {
         // check publication to decide whether allow the request to happen
         publicationStatus = publicationStatus || formValues.publication_status
-        if(!publicationStatus) {
+        if (!publicationStatus) {
             return
         }
         // prepare the body of the request (event object/array)
         let preparedFormValues
-        if(!Array.isArray(formValues)) {
+        if (!Array.isArray(formValues)) {
             preparedFormValues = {}
-            const newValues = prepareFormValues(formValues, contentLanguages, user, updateExisting, publicationStatus, dispatch)
-            if(newValues !== undefined) {
+            const newValues = prepareFormValues(
+                formValues,
+                contentLanguages,
+                user,
+                updateExisting,
+                publicationStatus,
+                dispatch
+            )
+            if (newValues !== undefined) {
                 preparedFormValues = newValues
             } else {
                 return
             }
-        } else if(Array.isArray(formValues) && formValues.length > 0) {
+        } else if (Array.isArray(formValues) && formValues.length > 0) {
             preparedFormValues = []
             formValues.map(formObject => {
-                const newValues = prepareFormValues(formObject, contentLanguages, user, updateExisting, publicationStatus, dispatch)
-                if(newValues !== undefined) {
+                const newValues = prepareFormValues(
+                    formObject,
+                    contentLanguages,
+                    user,
+                    updateExisting,
+                    publicationStatus,
+                    dispatch
+                )
+                if (newValues !== undefined) {
                     preparedFormValues.push(newValues)
                 } else {
                     return
@@ -270,83 +346,116 @@ const executeSendRequest = (formValues, contentLanguages, user, updateExisting, 
 
         // prepare other needed information for request matedata
         let url = `${appSettings.api_base}/event/`
-        if(updateExisting) {
+        if (updateExisting) {
             const updateId = formValues.id || formValues[0].id
             url += `${updateId}/`
         }
 
         let token = ''
-        if(user) {
+        if (user) {
             token = user.token
         }
-        
+
         dispatch(validateFor(publicationStatus))
+
+        const apikey = localStorage.getItem('apikey')
 
         return fetch(url, {
             method: updateExisting ? 'PUT' : 'POST',
             headers: {
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'JWT ' + token,
+                Authorization: 'JWT ' + token,
+                apikey: apikey,
             },
             body: JSON.stringify(preparedFormValues),
-        }).then(response => {
-            let jsonPromise = response.json()
+        })
+            .then(response => {
+                let jsonPromise = response.json()
 
-            jsonPromise.then(json => {
-                let actionName = updateExisting ? 'update' : 'create'
-                if(Array.isArray(json)) {
-                    json = json[0]
-                }
-                // The publication_status was changed to public. The event was published!
-                if(json.publication_status === constants.PUBLICATION_STATUS.PUBLIC && json.publication_status !== formValues.publication_status) {
-                    actionName = 'publish'
-                } else if ( json.publication_status === constants.PUBLICATION_STATUS.PUBLIC ) {
-                    actionName = 'savepublic'
-                } else if ( json.publication_status === constants.PUBLICATION_STATUS.DRAFT ) {
-                    actionName = 'savedraft'
-                }
+                jsonPromise.then(json => {
+                    let actionName = updateExisting ? 'update' : 'create'
+                    if (Array.isArray(json)) {
+                        json = json[0]
+                    }
+                    // The publication_status was changed to public. The event was published!
+                    if (
+                        json.publication_status ===
+                            constants.PUBLICATION_STATUS.PUBLIC &&
+                        json.publication_status !==
+                            formValues.publication_status
+                    ) {
+                        actionName = 'publish'
+                    } else if (
+                        json.publication_status ===
+                        constants.PUBLICATION_STATUS.PUBLIC
+                    ) {
+                        actionName = 'savepublic'
+                    } else if (
+                        json.publication_status ===
+                        constants.PUBLICATION_STATUS.DRAFT
+                    ) {
+                        actionName = 'savedraft'
+                    }
 
-                if(response.status === 200 || response.status === 201) {
-                    // create sub events after creaing super event successfully
-                    if (json.super_event_type === 'recurring') {
-                        const formWithAllSubEvents = combineSubEventsFromEditor(formValues, updateExisting)
-                        dispatch(
-                            sendRecurringData(formWithAllSubEvents, contentLanguages, user, updateExisting, publicationStatus, json['@id'])
-                        )
-                        dispatch(sendDataComplete(json, actionName))
-                    } else {
-                        dispatch(sendDataComplete(json, actionName))
-                        // re-fetch sub events for a series if done editing non-super events
-                        if (updateExisting) {
-                            const allSuperEventIds = Object.keys(getState().subEvents.bySuperEventId);
-                            const editedEventSuperId = json.super_event
-                                && allSuperEventIds.find(id => json.super_event['@id'].includes(id));
-                            dispatch(fetchSubEventsForSuper(editedEventSuperId));
+                    if (response.status === 200 || response.status === 201) {
+                        // create sub events after creaing super event successfully
+                        if (json.super_event_type === 'recurring') {
+                            const formWithAllSubEvents = combineSubEventsFromEditor(
+                                formValues,
+                                updateExisting
+                            )
+                            dispatch(
+                                sendRecurringData(
+                                    formWithAllSubEvents,
+                                    contentLanguages,
+                                    user,
+                                    updateExisting,
+                                    publicationStatus,
+                                    json['@id']
+                                )
+                            )
+                            dispatch(sendDataComplete(json, actionName))
+                        } else {
+                            dispatch(sendDataComplete(json, actionName))
+                            // re-fetch sub events for a series if done editing non-super events
+                            if (updateExisting) {
+                                const allSuperEventIds = Object.keys(
+                                    getState().subEvents.bySuperEventId
+                                )
+                                const editedEventSuperId =
+                                    json.super_event &&
+                                    allSuperEventIds.find(id =>
+                                        json.super_event['@id'].includes(id)
+                                    )
+                                dispatch(
+                                    fetchSubEventsForSuper(editedEventSuperId)
+                                )
+                            }
                         }
                     }
-                }
-                // Validation errors
-                else if(response.status === 400) {
-                    json.apiErrorMsg = 'validation-error'
-                    json.response = response
-                    dispatch(sendDataComplete(json, actionName))
-                }
+                    // Validation errors
+                    else if (response.status === 400) {
+                        json.apiErrorMsg = 'validation-error'
+                        json.response = response
+                        dispatch(sendDataComplete(json, actionName))
+                    }
 
-                // Auth errors
-                else if(response.status === 401 || response.status === 403) {
-                    json.apiErrorMsg = 'authorization-required'
-                    json.response = response
-                    dispatch(sendDataComplete(json, actionName))
-                }
-
-                else {
-                    json.apiErrorMsg = 'server-error'
-                    json.response = response
-                    dispatch(sendDataComplete(json, actionName))
-                }
+                    // Auth errors
+                    else if (
+                        response.status === 401 ||
+                        response.status === 403
+                    ) {
+                        json.apiErrorMsg = 'authorization-required'
+                        json.response = response
+                        dispatch(sendDataComplete(json, actionName))
+                    } else {
+                        json.apiErrorMsg = 'server-error'
+                        json.response = response
+                        dispatch(sendDataComplete(json, actionName))
+                    }
+                })
             })
-        })
             .catch(e => {
                 // Error happened while fetching ajax (connection or javascript)
             })
@@ -360,13 +469,21 @@ export function sendData(updateExisting = false, publicationStatus) {
         const user = getState().user
 
         // prepare and execute the request
-        dispatch(executeSendRequest(formValues, contentLanguages, user, updateExisting, publicationStatus))
+        dispatch(
+            executeSendRequest(
+                formValues,
+                contentLanguages,
+                user,
+                updateExisting,
+                publicationStatus
+            )
+        )
     }
 }
 
 export function sendDataComplete(json, action) {
-    return (dispatch) => {
-        if(json.apiErrorMsg) {
+    return dispatch => {
+        if (json.apiErrorMsg) {
             console.log('The api returned json', json)
             dispatch(setFlashMsg(json.apiErrorMsg, 'error', json))
             dispatch({
@@ -374,8 +491,7 @@ export function sendDataComplete(json, action) {
                 data: json,
                 action: action,
             })
-        }
-        else {
+        } else {
             dispatch(push(`/event/done/${action}/${json.id}`))
             dispatch({
                 type: constants.EDITOR_SENDDATA_SUCCESS,
@@ -386,8 +502,15 @@ export function sendDataComplete(json, action) {
     }
 }
 
-export function sendRecurringData(formValues, contentLanguages, user, updateExisting = false, publicationStatus, superEventId) {
-    return (dispatch) => {
+export function sendRecurringData(
+    formValues,
+    contentLanguages,
+    user,
+    updateExisting = false,
+    publicationStatus,
+    superEventId
+) {
+    return dispatch => {
         const subEvents = Object.assign({}, formValues.sub_events)
         const baseEvent = Object.assign({}, formValues, {
             sub_events: {},
@@ -396,31 +519,44 @@ export function sendRecurringData(formValues, contentLanguages, user, updateExis
         const newValues = []
         for (const key in subEvents) {
             if (subEvents.hasOwnProperty(key)) {
-                newValues.push(Object.assign({}, baseEvent, {start_time: subEvents[key].start_time, end_time: subEvents[key].end_time}))
+                newValues.push(
+                    Object.assign({}, baseEvent, {
+                        start_time: subEvents[key].start_time,
+                        end_time: subEvents[key].end_time,
+                    })
+                )
             }
         }
-        if(newValues.length > 0) {
-            dispatch(executeSendRequest(newValues, contentLanguages, user, updateExisting = false, publicationStatus))
+        if (newValues.length > 0) {
+            dispatch(
+                executeSendRequest(
+                    newValues,
+                    contentLanguages,
+                    user,
+                    (updateExisting = false),
+                    publicationStatus
+                )
+            )
         }
     }
 }
 
 // Fetch Hel.fi main category and audience keywords
 export function fetchKeywordSets() {
-    return (dispatch) => {
+    return dispatch => {
         let url = `${appSettings.api_base}/keyword_set/?include=keywords`
 
-        return fetch(url).then((response) => {
-
-            // Try again after a delay
-            if (response.status >= 400) {
-                setTimeout(e => dispatch(fetchKeywordSets()), 5000);
-                return null
-            }
-            return response.json()
-        })
+        return fetch(url)
+            .then(response => {
+                // Try again after a delay
+                if (response.status >= 400) {
+                    setTimeout(e => dispatch(fetchKeywordSets()), 5000)
+                    return null
+                }
+                return response.json()
+            })
             .then(json => {
-                if(json) {
+                if (json) {
                     return dispatch(receiveKeywordSets(json))
                 }
             })
@@ -442,20 +578,21 @@ export function receiveKeywordSets(json) {
 
 // Fetch Hel.fi languages
 export function fetchLanguages() {
-    return (dispatch) => {
+    return dispatch => {
         let url = `${appSettings.api_base}/language/`
 
         // Try again after a delay
-        return fetch(url).then((response) => {
-            if (response.status >= 400) {
-                setTimeout(e => dispatch(fetchLanguages()), 5000);
-                return null
-            } else {
-                return response.json()
-            }
-        })
+        return fetch(url)
+            .then(response => {
+                if (response.status >= 400) {
+                    setTimeout(e => dispatch(fetchLanguages()), 5000)
+                    return null
+                } else {
+                    return response.json()
+                }
+            })
             .then(json => {
-                if(json) {
+                if (json) {
                     return dispatch(receiveLanguages(json))
                 }
             })
@@ -479,24 +616,24 @@ export function receiveLanguages(json) {
 export function fetchEventForEditing(eventID, user = {}) {
     let url = `${appSettings.api_base}/event/${eventID}/?include=keywords,location,audience,in_language,external_links,image`
 
-    if(appSettings.nocache) {
+    if (appSettings.nocache) {
         url += `&nocache=${Date.now()}`
     }
 
     let options = {
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json',
         },
     }
 
-    if(user && user.token) {
+    if (user && user.token) {
         Object.assign(options.headers, {
-            'Authorization': 'JWT ' + user.token,
+            Authorization: 'JWT ' + user.token,
         })
     }
 
-    return (dispatch) => {
+    return dispatch => {
         return fetch(url, options)
             .then(response => response.json())
             .then(json => dispatch(receiveEventForEditing(json)))
@@ -516,80 +653,92 @@ export function receiveEventForEditing(json) {
 
 // recursively cancel an event and its sub events
 export function cancelEvent(eventId, user, values) {
-    const isSuperEvent = values.super_event_type === 'recurring';
+    const isSuperEvent = values.super_event_type === 'recurring'
 
     return (dispatch, getState) => {
-
         let url = `${appSettings.api_base}/event/${eventId}/`
 
         let token = ''
-        if(user) {
+        if (user) {
             token = user.token
         }
         // this should be an event object that matchs api event scheme
-        const data = Object.assign({}, values, {event_status: constants.EVENT_STATUS.CANCELLED})
+        const data = Object.assign({}, values, {
+            event_status: constants.EVENT_STATUS.CANCELLED,
+        })
 
         return fetch(url, {
             method: 'PUT',
             headers: {
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'JWT ' + token,
+                Authorization: 'JWT ' + token,
             },
             body: JSON.stringify(data),
-        }).then(response => {
-            //console.log('Received', response)
-            let jsonPromise = response.json()
-
-            jsonPromise.then(json => {
-                let actionName = 'cancel'
-
-                if(response.status === 200 || response.status === 201) {
-                    if (isSuperEvent) {
-                        const subEvents = getState().subEvents.items;
-                        subEvents.forEach(event => dispatch(cancelEvent(event.id, user, event)));
-                        dispatch(fetchSubEventsForSuper(json.id));
-                    }
-                    const allSuperEventIds = Object.keys(getState().subEvents.bySuperEventId);
-                    const cancelledEventSuperId = json.super_event
-                        && allSuperEventIds.find(id => json.super_event['@id'].includes(id));
-                    // re-fetch sub events data after cancelling non-super event
-                    if (cancelledEventSuperId) {
-                        dispatch(fetchSubEventsForSuper(cancelledEventSuperId));
-                    }
-                    dispatch(sendDataComplete(json, actionName));
-                }
-                // Validation errors
-                else if(response.status === 400) {
-                    json.apiErrorMsg = 'validation-error'
-                    dispatch(sendDataComplete(json, actionName))
-                }
-
-                // Auth errors
-                else if(response.status === 401 || response.status === 403) {
-                    json.apiErrorMsg = 'authorization-required'
-                    dispatch(sendDataComplete(json, actionName))
-                }
-
-                else {
-                    json.apiErrorMsg = 'server-error'
-                    dispatch(sendDataComplete(json, actionName))
-                }
-            })
         })
+            .then(response => {
+                //console.log('Received', response)
+                let jsonPromise = response.json()
+
+                jsonPromise.then(json => {
+                    let actionName = 'cancel'
+
+                    if (response.status === 200 || response.status === 201) {
+                        if (isSuperEvent) {
+                            const subEvents = getState().subEvents.items
+                            subEvents.forEach(event =>
+                                dispatch(cancelEvent(event.id, user, event))
+                            )
+                            dispatch(fetchSubEventsForSuper(json.id))
+                        }
+                        const allSuperEventIds = Object.keys(
+                            getState().subEvents.bySuperEventId
+                        )
+                        const cancelledEventSuperId =
+                            json.super_event &&
+                            allSuperEventIds.find(id =>
+                                json.super_event['@id'].includes(id)
+                            )
+                        // re-fetch sub events data after cancelling non-super event
+                        if (cancelledEventSuperId) {
+                            dispatch(
+                                fetchSubEventsForSuper(cancelledEventSuperId)
+                            )
+                        }
+                        dispatch(sendDataComplete(json, actionName))
+                    }
+                    // Validation errors
+                    else if (response.status === 400) {
+                        json.apiErrorMsg = 'validation-error'
+                        dispatch(sendDataComplete(json, actionName))
+                    }
+
+                    // Auth errors
+                    else if (
+                        response.status === 401 ||
+                        response.status === 403
+                    ) {
+                        json.apiErrorMsg = 'authorization-required'
+                        dispatch(sendDataComplete(json, actionName))
+                    } else {
+                        json.apiErrorMsg = 'server-error'
+                        dispatch(sendDataComplete(json, actionName))
+                    }
+                })
+            })
             .catch(e => {
                 // Error happened while fetching ajax (connection or javascript)
             })
     }
 }
 
-export function postDeleteEvent (values) {
-    return (dispatch) => {
+export function postDeleteEvent(values) {
+    return dispatch => {
         // reset/update redux app state, data clearance
-        dispatch(clearData());
-        dispatch(push('/'));
-        dispatch(eventDeleted(values));
-        dispatch(setFlashMsg(constants.EVENT_CREATION.DELETE_SUCCESS));
+        dispatch(clearData())
+        dispatch(push('/'))
+        dispatch(eventDeleted(values))
+        dispatch(setFlashMsg(constants.EVENT_CREATION.DELETE_SUCCESS))
     }
 }
 
@@ -598,51 +747,55 @@ export function deleteEvent(eventID, user, values, recursing = false) {
     let url = `${appSettings.api_base}/event/${eventID}/`
 
     let token = ''
-    if(user) {
+    if (user) {
         token = user.token
     }
-    const isSuperEvent = values.super_event_type === 'recurring';
+    const isSuperEvent = values.super_event_type === 'recurring'
 
     return (dispatch, getState) => {
         return fetch(url, {
             method: 'DELETE',
             headers: {
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'JWT ' + token,
+                Authorization: 'JWT ' + token,
             },
-        }).then(response => {
-
-            if(response.status === 200 || response.status === 201 || response.status === 203 || response.status === 204) {
-                if (isSuperEvent) {
-                    // if the previously deleted is a super event, continue to delete its sub events recursively
-                    const subEvents = getState().subEvents.items;
-                    subEvents.forEach(event => dispatch(deleteEvent(event.id, user, event, true)));
-                }
-                // only redirect if done deleting the whole series (when recursion stops)
-                if (!recursing) {
-                    dispatch(postDeleteEvent(values));
-                }
-            }
-
-            // Auth errors
-            else if(response.status === 401 || response.status === 403) {
-                let apiErrorMsg = 'authorization-required'
-                dispatch(eventDeleted(values, apiErrorMsg))
-            }
-
-            // No resource
-            else if(response.status === 404) {
-                let apiErrorMsg = 'not-found'
-                dispatch(eventDeleted(values, apiErrorMsg))
-            }
-
-            else {
-                let apiErrorMsg = 'server-error'
-                dispatch(eventDeleted(values, apiErrorMsg))
-            }
-
         })
+            .then(response => {
+                if (
+                    response.status === 200 ||
+                    response.status === 201 ||
+                    response.status === 203 ||
+                    response.status === 204
+                ) {
+                    if (isSuperEvent) {
+                        // if the previously deleted is a super event, continue to delete its sub events recursively
+                        const subEvents = getState().subEvents.items
+                        subEvents.forEach(event =>
+                            dispatch(deleteEvent(event.id, user, event, true))
+                        )
+                    }
+                    // only redirect if done deleting the whole series (when recursion stops)
+                    if (!recursing) {
+                        dispatch(postDeleteEvent(values))
+                    }
+                }
+
+                // Auth errors
+                else if (response.status === 401 || response.status === 403) {
+                    let apiErrorMsg = 'authorization-required'
+                    dispatch(eventDeleted(values, apiErrorMsg))
+                }
+
+                // No resource
+                else if (response.status === 404) {
+                    let apiErrorMsg = 'not-found'
+                    dispatch(eventDeleted(values, apiErrorMsg))
+                } else {
+                    let apiErrorMsg = 'server-error'
+                    dispatch(eventDeleted(values, apiErrorMsg))
+                }
+            })
             .catch(e => {
                 // Error happened while fetching ajax (connection or javascript)
             })
