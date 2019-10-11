@@ -1,8 +1,6 @@
 Linkedevents-UI - form-style UI for Linked Events API
 =====================================================
 
-[![codecov](https://codecov.io/gh/City-of-Helsinki/linkedevents-ui/branch/master/graph/badge.svg)](https://codecov.io/gh/City-of-Helsinki/linkedevents-ui)
-
 Linkedevents-UI is a user interface for creating and changing events through
 Linked Events API. It exposes many capabilities of the API including:
 
