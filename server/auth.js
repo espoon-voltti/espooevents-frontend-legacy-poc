@@ -4,7 +4,6 @@ import _debug from 'debug'
 
 const debug = _debug('auth')
 const basicAuth = require('express-basic-auth')
-const jwt = require('jsonwebtoken')
 
 export function getPassport(settings) {
     const passport = new Passport()
@@ -37,16 +36,6 @@ export function getPassport(settings) {
     passport.deserializeUser((user, done) => done(null, user))
 
     return passport
-}
-
-function successfulLoginHandler(req, res) {
-    const js = `setTimeout(function() {
-      if(window.opener) {
-          window.close();
-      }
-      else { location.href = "/"; }
-    }, 300);`
-    res.send('<html><body>Login successful.<script>' + js + '</script>')
 }
 
 export function addAuth(server, passport, settings) {
