@@ -1,8 +1,6 @@
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Route} from 'react-router'
-import PropTypes from 'prop-types'
 
 import {Link, withRouter} from 'react-router-dom'
 import createHistory from 'history/createBrowserHistory' //'history/createHashHistory'
@@ -10,7 +8,12 @@ import createHistory from 'history/createBrowserHistory' //'history/createHashHi
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
 import {Provider, connect} from 'react-redux'
 
-import {ConnectedRouter, routerReducer, routerMiddleware, push} from 'react-router-redux'
+import {
+    ConnectedRouter,
+    routerReducer,
+    routerMiddleware,
+    push,
+} from 'react-router-redux'
 
 import thunk from 'redux-thunk'
 
@@ -29,62 +32,69 @@ import EventListingPage from './views/EventListing'
 import Validator from './actors/validator'
 
 // JA addition
-import Serializer from './actors/serializer';
-import {report} from './utils/raven_reporter';
-import {Modal, Button, Glyphicon} from 'react-bootstrap';
+import Serializer from './actors/serializer'
 
 // translation
 import IntlProviderWrapper from './components/IntlProviderWrapper'
 
 const history = createHistory()
 
-const allReducers = combineReducers(Object.assign({}, reducers, {
-    router: routerReducer,
-}))
+const allReducers = combineReducers(
+    Object.assign({}, reducers, {
+        router: routerReducer,
+    })
+)
 
 const allMiddlewares = compose(
     applyMiddleware(thunk),
     applyMiddleware(routerMiddleware(history)),
-    typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : f => f
+    typeof window === 'object' &&
+        typeof window.devToolsExtension !== 'undefined'
+        ? window.devToolsExtension()
+        : f => f
 )
 
 const store = createStore(allReducers, allMiddlewares)
-
-
 
 // Setup actor for validation. Actor is a viewless component which can listen to store changes
 // and send new actions accordingly. Bind the store as this for function
 store.subscribe(_.bind(Validator, null, store))
 
 // JA: Serializing state for debugging
-store.subscribe(_.bind(Serializer, null, store));
+store.subscribe(_.bind(Serializer, null, store))
 
-const LayoutContainer = withRouter(connect()(App));
+const LayoutContainer = withRouter(connect()(App))
 
-const Container = () =>
-{
+const Container = () => {
     // return <Login />
     // authenticate() ? <Login /> :
-    return <Provider store={store}>
-        <IntlProviderWrapper>
-            <ConnectedRouter history={history}>
-                <LayoutContainer>
-                    <Route exact path="/" component={EventListingPage} />
-                    <Route exact path="/event/:eventId" component={Event} />
-                    <Route exact path="/event/:action/:eventId" component={Editor} />
-                    <Route exact path="/event/done/:action/:eventId" component={EventCreated} />
-                    <Route exact path="/search" component={Search} />
-                    <Route exact path="/help" component={Help} />
-                </LayoutContainer>
-            </ConnectedRouter>
-        </IntlProviderWrapper>
-    </Provider>
+    return (
+        <Provider store={store}>
+            <IntlProviderWrapper>
+                <ConnectedRouter history={history}>
+                    <LayoutContainer>
+                        <Route exact path="/" component={EventListingPage} />
+                        <Route exact path="/event/:eventId" component={Event} />
+                        <Route
+                            exact
+                            path="/event/:action/:eventId"
+                            component={Editor}
+                        />
+                        <Route
+                            exact
+                            path="/event/done/:action/:eventId"
+                            component={EventCreated}
+                        />
+                        <Route exact path="/search" component={Search} />
+                        <Route exact path="/help" component={Help} />
+                    </LayoutContainer>
+                </ConnectedRouter>
+            </IntlProviderWrapper>
+        </Provider>
+    )
 }
 
-ReactDOM.render(
-    <Container />,
-    document.getElementById('content')
-)
+ReactDOM.render(<Container />, document.getElementById('content'))
 
 // class DebugReporterModal extends React.Component {
 //     constructor(props) {
