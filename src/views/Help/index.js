@@ -6,16 +6,16 @@ const EventsHelp = () => {
     return (
         <div className="container help-page">
             <div id="short">
-                <h1>Linked Events lyhyesti</h1>
+                <h1>Espoo Events lyhyesti</h1>
                 <ul>
                     <li>Tapahtumatiedot näkyvät useissa eri sovelluksissa – myös muissa kuin kaupungin omissa.</li>
-                    <li>Tapahtumia saa syöttää kaupungin luvalla. Niiden ei tarvitse olla kaupungin järjestämiä.</li> 
+                    <li>Tapahtumia saa syöttää kaupungin luvalla. Niiden ei tarvitse olla kaupungin järjestämiä.</li>
                     <li>Tapahtumalle voi antaa useita päivämääriä. Tapahtumasarjalle luodaan automaattisesti ylätapahtuma.</li>
                     <li>Tapahtumia voi myös kopioida, perua ja poistaa.</li>
                     <li>Huolella syötetyt tiedot helpottavat tapahtuman löytämistä:</li>
                     <ul>
                         <li>Eri yhteyksissä ymmärrettävät otsikko, lyhyt kuvaus ja kuvaus.</li>
-                        <li>Lyhyt kuvaus näytetään vain listoissa, kuvaus taas tapahtuman omalla sivulla.</li>        
+                        <li>Lyhyt kuvaus näytetään vain listoissa, kuvaus taas tapahtuman omalla sivulla.</li>
                         <li>Jos kohderyhmä on rajattu, kerro siitä kuvauskentässä.</li>
                         <li>Verkkoon sopivaksi muokattu 3:2-vaakakuva, esim. 1200px X 800px.</li>
                         <li>Ylätasoinen asiasanoitus ja luokittelu. Käytä aina joitain suosittuja asiasanoja.</li>
@@ -23,7 +23,7 @@ const EventsHelp = () => {
                 </ul>
 
                 <p>Kaupungin tapahtumakalenteri: <a href="http://www.hel.fi/tapahtumat" rel='noopener noreferrer' target="_blank">hel.fi/tapahtumat</a>.</p>
-                <p>Linked Events -rajapinta: <a href="http://api.hel.fi/linkedevents" rel='noopener noreferrer' target="_blank">api.hel.fi/linkedevents</a>.</p>
+                <p>Espoo Events -rajapinta: <a href="http://api.hel.fi/linkedevents" rel='noopener noreferrer' target="_blank">api.hel.fi/linkedevents</a>.</p>
                 <p>Rajapinnan kehittäjäsivu: <a href="https://dev.hel.fi/projects/linked-events/" rel='noopener noreferrer' target="_blank">dev.hel.fi/projects/linked-events</a><br/></p>
 
                 <p>Rajapinnan palvelupäällikkö on Aleksi Salonen (@hel.fi) ja tekninen kehityspäällikkö Riku Oja (@hel.fi).</p>
@@ -32,11 +32,11 @@ const EventsHelp = () => {
             <hr/>
 
             <div id="long">
-                <h1>Linked Events -tapahtumarajapinnan syöttökäyttöliittymä</h1>
+                <h1>Espoo Events -tapahtumarajapinnan syöttökäyttöliittymä</h1>
 
                 <h2>A. Yleistä</h2>
 
-                <p>1. <strong>Linked Events on Helsingin kaupungin tapahtumarajapinta.</strong> Rajapintaan syötetyt tapahtumat siirtyvät automaattisesti kaupungin tapahtumakalenteriin, palvelukartalle ja myös muihin kuin kaupungin ylläpitämiin kalenterisovelluksiin. Tapahtuman kuvaus kannattaa siksi laatia helposti ymmärrettäväksi eri käyttöpaikoissa.</p>
+                <p>1. <strong>Espoo Events on Espoon kaupungin tapahtumarajapinta.</strong> Rajapintaan syötetyt tapahtumat siirtyvät automaattisesti kaupungin tapahtumakalenteriin, palvelukartalle ja myös muihin kuin kaupungin ylläpitämiin kalenterisovelluksiin. Tapahtuman kuvaus kannattaa siksi laatia helposti ymmärrettäväksi eri käyttöpaikoissa.</p>
 
                 <p>2. <strong>Rajapinnan syöttökäyttöliittymä</strong> löytyy osoitteesta linkedevents.hel.fi. Käyttöoikeuden saa kirjautumalla ensin palveluun ja lähettämällä tämän jälkeen oikeuksien vahvistuspyynnön. Syöttöliittymää voi käyttää mistä vain ja myös mobiililaitteilla. Muokkausoikeus on oman organisaation tapahtumille.</p>
 
@@ -81,13 +81,13 @@ const CoursesHelp = () => {
                 <h1>Linked Courses lyhyesti</h1>
                 <ul>
                     <li>Kurssitiedot näkyvät useissa eri sovelluksissa – myös muissa kuin kaupungin omissa.</li>
-                    <li>Kursseja saa syöttää kaupungin luvalla. Niiden ei tarvitse olla kaupungin järjestämiä.</li> 
+                    <li>Kursseja saa syöttää kaupungin luvalla. Niiden ei tarvitse olla kaupungin järjestämiä.</li>
                     <li>Kursseille voi antaa useita päivämääriä. Tapahtumasarjalle luodaan automaattisesti ylätapahtuma.</li>
                     <li>Kursseja voi myös kopioida, perua ja poistaa.</li>
                     <li>Huolella syötetyt tiedot helpottavat kurssin löytämistä:</li>
                     <ul>
                         <li>Eri yhteyksissä ymmärrettävät otsikko, lyhyt kuvaus ja kuvaus.</li>
-                        <li>Lyhyt kuvaus näytetään vain listoissa, kuvaus taas kurssin omalla sivulla.</li>        
+                        <li>Lyhyt kuvaus näytetään vain listoissa, kuvaus taas kurssin omalla sivulla.</li>
                         <li>Jos kohderyhmä on rajattu, kerro siitä kuvauskentässä.</li>
                         <li>Verkkoon sopivaksi muokattu 3:2-vaakakuva, esim. 1200px X 800px.</li>
                         <li>Ylätasoinen asiasanoitus ja luokittelu. Käytä aina joitain suosittuja asiasanoja.</li>

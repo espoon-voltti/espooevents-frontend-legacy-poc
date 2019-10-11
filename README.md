@@ -1,9 +1,6 @@
 Linkedevents-UI - form-style UI for Linked Events API
 =====================================================
 
-[![Build status](https://travis-ci.org/City-of-Helsinki/linkedevents-ui.svg?branch=master)](https://travis-ci.org/City-of-Helsinki/linkedevents-ui)
-[![codecov](https://codecov.io/gh/City-of-Helsinki/linkedevents-ui/branch/master/graph/badge.svg)](https://codecov.io/gh/City-of-Helsinki/linkedevents-ui)
-
 Linkedevents-UI is a user interface for creating and changing events through
 Linked Events API. It exposes many capabilities of the API including:
 
@@ -13,7 +10,7 @@ Linked Events API. It exposes many capabilities of the API including:
 
 # Prerequisites
 * Yarn
-* Node v8 LTS 
+* Node v8 LTS
 * Python 2 (due to node-sass using node-gyp)
 
 # Development Installation
@@ -107,4 +104,4 @@ to the authentication server. The table below shows what needs to served:
 | filename | serve from dist-directory |
 | unknown files | serve index.html from dist-directory |
 
-The last part is needed for deep linking into the application. 
+The last part is needed for deep linking into the application.
