@@ -11,7 +11,7 @@ exports[`Search Snapshot should render view correctly 1`] = `
   </h1>
   <p>
     <span>
-      Katsele kaikkia Linked Eventsin tapahtumia.
+      Katsele kaikkia Espoo Eventsin tapahtumia.
     </span>
   </p>
   <form

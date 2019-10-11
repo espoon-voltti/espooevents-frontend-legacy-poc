@@ -111,7 +111,7 @@ class App extends React.Component {
                     </Well>
             } else {
                 organization_missing_msg =
-                    <Well><h4>Tervetuloa käyttämään Linked Eventsiä, {this.props.user.displayName}!</h4>
+                    <Well><h4>Tervetuloa käyttämään Espoo Eventsiä, {this.props.user.displayName}!</h4>
                         <p>Sinulla ei ole vielä oikeutta hallinnoida yhdenkään yksikön tapahtumia.
                             Ota yhteyttä <a href="mailto:aleksi.salonen@hel.fi">Aleksi Saloseen</a> saadaksesi oikeudet
                             muokata yksikkösi tapahtumia.</p>
@@ -138,14 +138,14 @@ class App extends React.Component {
                             <div dangerouslySetInnerHTML={getMarkup()}/>
                         </Modal.Body>
                         <Modal.Footer>
-                            <MaterialButton 
-                                style={buttonStyle} 
+                            <MaterialButton
+                                style={buttonStyle}
                                 onClick={e => this.props.cancel()}>
                                 <FormattedMessage id="cancel" />
                             </MaterialButton>
 
-                            <MaterialButton 
-                                style={useWarningButtonStyle ? warningButtonStyle : buttonStyle} 
+                            <MaterialButton
+                                style={useWarningButtonStyle ? warningButtonStyle : buttonStyle}
                                 onClick={e => this.props.do(this.props.app.confirmAction.data)}>
                                 <FormattedMessage id={actionButtonLabel} />
                             </MaterialButton>

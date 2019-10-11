@@ -1,12 +1,12 @@
 {
     "login": "Login",
     "logout": "Logout",
-    "linked-events": "Linked Events",
+    "linked-events": "Espoo Events",
     "create-events": "Create a new event",
     "edit-events": "Edit the event",
     "copy-event-to-draft": "Copy to draft",
     "search-events": "Search events",
-    "search-events-description": "View all events on Linked Events.",
+    "search-events-description": "View all events on Espoo Events.",
     "pick-time-range": "Pick time range",
     "event-name-or-place": "Event name or place",
     "search-event-button": "Search for events",
@@ -40,16 +40,13 @@
     "clear-form": "Clear form",
 
     "event-presented-in-languages": "This event will be presented in following languages.",
-    
+
     "in-fi": "In Finnish",
     "in-en": "In English",
     "in-sv": "In Swedish",
-    "in-ru": "In Russian",
-    "in-zh_hans": "In Chinese",
-    "in-ar": "In Arabic",
 
     "no-value": "-field is empty.",
-    
+
     "event-description-fields-header": "Event description",
     "event-headline": "Title",
     "event-short-description": "Short description",
@@ -58,12 +55,12 @@
     "event-provider": "Event organizer",
     "event-provider-input": "Event organizer (if different than the publisher)",
     "event-publisher": "Event publisher",
-    
+
     "events-management": "Manage events",
     "events-management-prompt": "to manage events.",
     "events-management-description": "Browse and edit drafts and published events of your organization.",
     "events-management-no-results": "No editable events found.",
-   
+
     "event-image": "Event image (click to change)",
     "new-image": "Add a new image",
     "upload-image": "Upload image from your hard disk",
