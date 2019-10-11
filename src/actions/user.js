@@ -1,10 +1,18 @@
 import constants from '../constants.js'
 import fetch from 'isomorphic-fetch'
-import {get} from 'lodash'
-import {resetUserEventsFetching} from './userEvents'
+import React from 'react'
+import
+{
+    get,
+} from 'lodash'
+import
+{
+    resetUserEventsFetching,
+} from './userEvents'
 
 // Handled by the user reducer
-export function receiveUserData(data) {
+export function receiveUserData(data)
+{
     return {
         type: constants.RECEIVE_USERDATA,
         payload: data,
@@ -12,14 +20,16 @@ export function receiveUserData(data) {
 }
 
 // Handled by the user reducer
-export function clearUserData() {
+export function clearUserData()
+{
     return {
         type: constants.CLEAR_USERDATA,
     }
 }
 
 // Adds an expiration time for user and saves it to localStorage.
-function saveUserToLocalStorage(user) {
+function saveUserToLocalStorage(user)
+{
     let modifiedUser = Object.assign({}, user)
 
     let expiryDate = new Date()
@@ -29,20 +39,30 @@ function saveUserToLocalStorage(user) {
     localStorage.setItem('user', JSON.stringify(modifiedUser))
 }
 
-export function retrieveUserFromSession() {
-    return (dispatch) => {
-        return fetch('/auth/me?' + (+new Date()), {method: 'GET', credentials: 'same-origin'}).then((response) => {
+export function retrieveUserFromSession()
+{
+    return (dispatch) =>
+    {
+        return fetch('/auth/me?' + (+new Date()), {
+            method: 'GET',
+            credentials: 'same-origin',
+        }).then((response) =>
+        {
             return response.json()
-        }).then((user) => {
-            if(user.token) {
+        }).then((user) =>
+        {
+            if (user.token)
+            {
                 const settings = {
                     headers: {
                         'Authorization': 'JWT ' + user.token,
                     },
                 }
-                return fetch(`${appSettings.api_base}/user/${user.username}/`, settings).then((response) => {
+                return fetch(`${appSettings.api_base}/user/${user.username}/`, settings).then((response) =>
+                {
                     return response.json()
-                }).then((userJSON) => {
+                }).then((userJSON) =>
+                {
                     let mergedUser = Object.assign({}, user, {
                         organization: get(userJSON, 'organization', null),
                         adminOrganizations: get(userJSON, 'admin_organizations', null),
@@ -52,40 +72,58 @@ export function retrieveUserFromSession() {
                     saveUserToLocalStorage(mergedUser)
                     return dispatch(receiveUserData(mergedUser))
                 })
-            } else {
+            } else
+            {
                 // dispatch(login())
             }
         })
     }
 }
 
-export function login() {
-    return (dispatch) => {
-        return new Promise((resolve) => {
-            if (typeof window === 'undefined') {  // Not in DOM? Just try to get an user then and see how that goes.
-                return resolve(true);
-            }
-            const loginPopup = window.open(
-                '/auth/login/helsinki',
-                'kkLoginWindow',
-                'location,scrollbars=on,width=720,height=600'
-            );
-            const wait = function wait() {
-                if (loginPopup.closed) { // Is our login popup gone?
-                    return resolve(true);
-                }
-                setTimeout(wait, 500); // Try again in a bit...
-            };
-            wait();
-        }).then(() => {
+export function login()
+{
+    return (dispatch) =>
+    {
+        return new Promise((resolve) =>
+        {
+            const user = window.prompt('Username: ')
+            const password = window.prompt('Password: ')
+            console.log(user, password);
+            const credentials = user + ':' + password
+            const encodedCredentials = window.btoa(credentials)
+            const response = fetch('/auth/login/helsinki', {
+                // method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Authorization': 'Basic ' + encodedCredentials,
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrer: 'no-referrer', // no-referrer, *client
+            }).then(res => res.json())
+                .then(res =>
+                {
+                    if (res.apikey)
+                    {
+                        localStorage.setItem('apikey', res.apikey)
+                    }
+                })
+        }).then(() =>
+        {
             return dispatch(retrieveUserFromSession());
         });
     };
 }
 
-export function logout() {
-    return (dispatch) => {
-        fetch('/auth/logout', {method: 'POST', credentials: 'same-origin'}) // Fire-and-forget
+export function logout()
+{
+    return (dispatch) =>
+    {
+        fetch('/auth/logout', {
+            method: 'POST',
+            credentials: 'same-origin',
+        }) // Fire-and-forget
         localStorage.removeItem('user')
         dispatch(clearUserData())
         dispatch(resetUserEventsFetching())
