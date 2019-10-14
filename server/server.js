@@ -7,7 +7,7 @@ import cookieSession from 'cookie-session'
 
 import getSettings from './getSettings'
 import express from 'express'
-import {getPassport, addAuth} from './auth'
+import {addAuth} from './auth'
 
 import webpack from 'webpack'
 import webpackMiddleware from 'webpack-dev-middleware'
@@ -16,40 +16,44 @@ import config from '../config/webpack/dev.js'
 
 const settings = getSettings()
 const app = express()
-const passport = getPassport(settings)
 
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(
+    cookieSession({
+        name: 's',
+        secret: settings.sessionSecret,
+        maxAge: 86400 * 1000,
+    })
+)
 
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieSession({name: 's', secret: settings.sessionSecret, maxAge: 86400 * 1000}));
+addAuth(app)
 
-app.use(passport.initialize());
-app.use(passport.session());
-addAuth(app, passport, settings);
-
-if(process.env.NODE_ENV !== 'development') {
-    app.use('/', express.static(path.resolve(__dirname, '..', 'dist')));
-    app.get('*', function (req, res) {
-        res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'));
-    });
+if (process.env.NODE_ENV !== 'development') {
+    app.use('/', express.static(path.resolve(__dirname, '..', 'dist')))
+    app.get('*', function(req, res) {
+        res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'))
+    })
 } else {
-    const indexTemplate = require('./renderIndexTemplate');
+    const indexTemplate = require('./renderIndexTemplate')
     const compiler = webpack(config)
-    app.use(webpackMiddleware(compiler, {
-        publicPath: config.output.publicPath,
-        stats: {
-            colors: true,
-            assets: false,
-            modules: false,
-        },
-    }));
-    app.use(webpackHotMiddleware(compiler));
-    
+    app.use(
+        webpackMiddleware(compiler, {
+            publicPath: config.output.publicPath,
+            stats: {
+                colors: true,
+                assets: false,
+                modules: false,
+            },
+        })
+    )
+    app.use(webpackHotMiddleware(compiler))
+
     app.get('*', (req, res) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/html')   
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'text/html')
         res.end(indexTemplate)
     })
 }
-console.log('Starting server at port', settings.port);
-app.listen(settings.port);
+console.log('Starting server at port', settings.port)
+app.listen(settings.port)

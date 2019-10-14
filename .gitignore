@@ -3,6 +3,7 @@
 /dist/
 /config/local.yml
 npm-debug.log
+.env
 .idea
 server.config
 yarn-error.log

@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom'
 import {Route} from 'react-router'
 
 import {withRouter} from 'react-router-dom'
-import createHistory from 'history/createBrowserHistory' //'history/createHashHistory'
-
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
 import {Provider, connect} from 'react-redux'
 
@@ -36,7 +34,7 @@ import Serializer from './actors/serializer'
 // translation
 import IntlProviderWrapper from './components/IntlProviderWrapper'
 
-const history = createHistory()
+const history = require('history').createBrowserHistory()
 
 const allReducers = combineReducers(
     Object.assign({}, reducers, {
@@ -65,8 +63,6 @@ store.subscribe(_.bind(Serializer, null, store))
 const LayoutContainer = withRouter(connect()(App))
 
 const Container = () => {
-    // return <Login />
-    // authenticate() ? <Login /> :
     return (
         <Provider store={store}>
             <IntlProviderWrapper>

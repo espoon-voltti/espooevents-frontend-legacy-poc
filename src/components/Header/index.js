@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {withRouter} from 'react-router'
 
-import {login as loginAction, logout as logoutAction} from 'src/actions/user.js'
+import {login, logout, loggedInUser} from 'src/actions/user.js'
 import {setLocale as setLocaleAction} from 'src/actions/userLocale'
 
 import {FormattedMessage} from 'react-intl'
@@ -88,9 +88,10 @@ class HeaderBar extends React.Component {
                                 </Select>
                             </div>
                         </div>
-                        {user ? (
+                        {loggedInUser() ? (
                             <Button onClick={() => logout()}>
-                                {user.displayName}
+                                <Person />
+                                <FormattedMessage id="logout" />
                             </Button>
                         ) : (
                             <Button onClick={() => login()}>
@@ -208,8 +209,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    login: () => dispatch(loginAction()),
-    logout: () => dispatch(logoutAction()),
+    login: () => dispatch(login()),
+    logout: () => dispatch(logout()),
     routerPush: url => dispatch(push(url)),
     setLocale: locale => dispatch(setLocaleAction(locale)),
 })
