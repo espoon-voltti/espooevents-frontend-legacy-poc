@@ -1,4 +1,5 @@
 const basicAuth = require('express-basic-auth')
+require('dotenv').config()
 
 export function addAuth(server) {
     server.get(
