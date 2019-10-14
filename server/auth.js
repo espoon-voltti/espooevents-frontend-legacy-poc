@@ -47,7 +47,7 @@ export function addAuth(server, passport, settings) {
             },
         }),
         (req, res) => {
-            res.send({apikey: 'abc123'})
+            res.send({apikey: process.env.ESPOOEVENTS_API_KEY})
         }
     )
 }
