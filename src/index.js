@@ -65,8 +65,6 @@ store.subscribe(_.bind(Serializer, null, store))
 const LayoutContainer = withRouter(connect()(App))
 
 const Container = () => {
-    // return <Login />
-    // authenticate() ? <Login /> :
     return (
         <Provider store={store}>
             <IntlProviderWrapper>
