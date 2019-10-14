@@ -1,7 +1,6 @@
 import constants from '../constants.js'
 import fetch from 'isomorphic-fetch'
 import {get} from 'lodash'
-import {resetUserEventsFetching} from './userEvents'
 
 // Handled by the user reducer
 export function receiveUserData(data) {
@@ -84,12 +83,12 @@ export function retrieveUserFromSession() {
 export function login() {
     return dispatch => {
         return new Promise(resolve => {
-            const user = window.prompt('Username: ')
-            const password = window.prompt('Password: ')
+            const user = window.prompt('Käyttäjätunnus: ')
+            const password = window.prompt('Salasana: ')
             console.log(user, password)
             const credentials = user + ':' + password
             const encodedCredentials = window.btoa(credentials)
-            const response = fetch('/auth/login/helsinki', {
+            fetch('/auth/login/helsinki', {
                 // method: 'POST', // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -100,10 +99,18 @@ export function login() {
                 redirect: 'follow', // manual, *follow, error
                 referrer: 'no-referrer', // no-referrer, *client
             })
-                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 200) {
+                        return res.json()
+                    } else {
+                        window.alert('Väärä käyttäjätunnus tai salasana!')
+                    }
+                })
                 .then(res => {
                     if (res.apikey) {
                         localStorage.setItem('apikey', res.apikey)
+                        window.alert('Tervetuloa admin!')
+                        window.location.reload()
                     }
                 })
         }).then(() => {
@@ -113,13 +120,10 @@ export function login() {
 }
 
 export function logout() {
-    return dispatch => {
-        fetch('/auth/logout', {
-            method: 'POST',
-            credentials: 'same-origin',
-        }) // Fire-and-forget
-        localStorage.removeItem('user')
-        dispatch(clearUserData())
-        dispatch(resetUserEventsFetching())
-    }
+    localStorage.removeItem('apikey')
+    window.location.reload()
+}
+
+export function loggedInUser() {
+    return localStorage.getItem('apikey') ? true : false
 }
