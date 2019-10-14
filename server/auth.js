@@ -43,7 +43,7 @@ export function addAuth(server, passport, settings) {
         '/auth/login/helsinki',
         basicAuth({
             users: {
-                admin: process.env.AUTH_KEY,
+                admin: process.env.ESPOOEVENTS_AUTH_KEY,
             },
         }),
         (req, res) => {
