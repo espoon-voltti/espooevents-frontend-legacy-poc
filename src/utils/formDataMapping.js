@@ -267,9 +267,11 @@ function mapAPIDataToUIFormat(values) {
         'enrolment_start_time', 'enrolment_end_time', 'minimum_attendee_capacity', 'maximum_attendee_capacity',
     ];
     courseFields.forEach(field => {
-        const value = values['extension_course'][field]
-        if (value) {
-            obj[field] = value
+        if(values['extension_course']) {
+            const value = values['extension_course'][field]
+            if (value) {
+                obj[field] = value
+            }
         }
     })
 
