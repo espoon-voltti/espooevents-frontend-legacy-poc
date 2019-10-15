@@ -1,15 +1,23 @@
-import {find, clone, map, lastIndexOf, forOwn, every, includes, isEmpty, cloneDeep, remove, values, pickBy} from 'lodash'
+import {
+    find,
+    clone,
+    map,
+    lastIndexOf,
+    forOwn,
+    every,
+    includes,
+    isEmpty,
+    cloneDeep,
+    remove,
+    values,
+    pickBy,
+} from 'lodash'
 import constants from 'src/constants.js'
 import moment from 'moment'
 import 'moment-timezone'
 
 import {getStringWithLocale} from './locale'
-import {mapLanguagesSetToForm} from './apiDataMapping'
-
-export {
-    mapUIDataToAPIFormat,
-    mapAPIDataToUIFormat,
-}
+export {mapUIDataToAPIFormat, mapAPIDataToUIFormat}
 
 // hel.fi audience keywords that correspond to YSO audience keywords need to be posted also for now
 
@@ -27,14 +35,16 @@ function _addHelFiAudienceKeywords(original_audiences) {
     let audiences = clone(original_audiences)
 
     const audienceIds = map(audiences, function(audience) {
-    // parse keyword ID from keyword URL
-        return audience.slice(lastIndexOf(audience, '/', audience.length - 2) + 1, -1)
+        // parse keyword ID from keyword URL
+        return audience.slice(
+            lastIndexOf(audience, '/', audience.length - 2) + 1,
+            -1
+        )
     })
 
     // iterate hel.fi keywords
     forOwn(helFiYsoAudienceMapping, function(ysoIDs, helFiID) {
-
-    // check that every YSO keyword for the current hel.fi keyword is selected
+        // check that every YSO keyword for the current hel.fi keyword is selected
         const containsEveryYso = every(ysoIDs, function(ysoID) {
             return includes(audienceIds, ysoID)
         })
@@ -47,8 +57,7 @@ function _addHelFiAudienceKeywords(original_audiences) {
 
 function _nullifyEmptyStrings(multiLangObject) {
     forOwn(multiLangObject, function(value, language) {
-
-    // do not send empty strings to the backend, as this will set the null language field to non-null
+        // do not send empty strings to the backend, as this will set the null language field to non-null
         if (value === '') {
             multiLangObject[language] = null
         }
@@ -59,13 +68,13 @@ function _nullifyEmptyStrings(multiLangObject) {
 // TODO: Refactoring form components to output and accept the correct format (like <MultiLanguageField> to output {fi: name, se: namn})
 
 function mapUIDataToAPIFormat(values) {
-    if(!values) {
+    if (!values) {
         return {}
     }
 
     let obj = {}
 
-    if(values.id) {
+    if (values.id) {
         obj.id = values.id
     }
 
@@ -76,7 +85,8 @@ function mapUIDataToAPIFormat(values) {
     obj.info_url = _nullifyEmptyStrings(values.info_url)
     obj.provider = _nullifyEmptyStrings(values.provider)
     obj.event_status = values.event_status || constants.EVENT_STATUS.SCHEDULED
-    obj.publication_status = values.publication_status || constants.PUBLICATION_STATUS.DRAFT
+    obj.publication_status =
+        values.publication_status || constants.PUBLICATION_STATUS.DRAFT
     obj.super_event_type = values.super_event_type
     obj.super_event = values.super_event
     obj.publisher = values.organization
@@ -87,7 +97,7 @@ function mapUIDataToAPIFormat(values) {
 
     // Image data
     obj.images = []
-    if(values.image && !isEmpty(values.image)) {
+    if (values.image && !isEmpty(values.image)) {
         obj.images[0] = values.image
     }
 
@@ -95,37 +105,43 @@ function mapUIDataToAPIFormat(values) {
     if (values.offers === undefined) {
         obj.offers = []
     }
-    if(values.offers && values.offers.length && !values.offers[0].is_free) {
+    if (values.offers && values.offers.length && !values.offers[0].is_free) {
         obj.offers = values.offers
     } else {
         obj.offers = [{is_free: true}]
     }
 
     // Keywords, audience, languages
-    if(values.keywords && values.keywords.length !== undefined) {
-        obj.keywords = map(values.keywords, (item) => ({'@id': item.value}))
+    if (values.keywords && values.keywords.length !== undefined) {
+        obj.keywords = map(values.keywords, item => ({'@id': item.value}))
     }
 
-    if(values.hel_main && values.hel_main.length !== undefined) {
+    if (values.hel_main && values.hel_main.length !== undefined) {
         obj.keywords = obj.keywords || []
-        obj.keywords = obj.keywords.concat(map(values.hel_main, (item) => ({'@id': item})))
+        obj.keywords = obj.keywords.concat(
+            map(values.hel_main, item => ({'@id': item}))
+        )
     }
 
-    if(values.audience && values.audience.length !== undefined) {
+    if (values.audience && values.audience.length !== undefined) {
         const audiences = _addHelFiAudienceKeywords(values.audience)
-        obj.audience = map(audiences, (item) => ({'@id': item}))
+        obj.audience = map(audiences, item => ({'@id': item}))
     }
 
-    if(values.in_language) {
+    if (values.in_language) {
         obj.in_language = values.in_language.map(lang => ({'@id': lang}))
     }
 
     // External links
     obj.external_links = []
 
-    let externalLinkFields = ['extlink_facebook', 'extlink_twitter', 'extlink_instagram']
-    externalLinkFields.forEach((field) => {
-        if(values[field]) {
+    let externalLinkFields = [
+        'extlink_facebook',
+        'extlink_twitter',
+        'extlink_instagram',
+    ]
+    externalLinkFields.forEach(field => {
+        if (values[field]) {
             obj.external_links.push({
                 name: field,
                 link: values[field],
@@ -134,11 +150,11 @@ function mapUIDataToAPIFormat(values) {
         }
     })
 
-    if(values.start_time) {
+    if (values.start_time) {
         obj.start_time = values.start_time
     }
 
-    if(values.end_time) {
+    if (values.end_time) {
         obj.end_time = values.end_time
     }
 
@@ -158,22 +174,24 @@ function mapUIDataToAPIFormat(values) {
         courseFields.enrolment_end_time = values.enrolment_end_time
     }
     if (values.minimum_attendee_capacity) {
-        courseFields.minimum_attendee_capacity = parseInt(values.minimum_attendee_capacity, 10)
+        courseFields.minimum_attendee_capacity = parseInt(
+            values.minimum_attendee_capacity,
+            10
+        )
     }
     if (values.maximum_attendee_capacity) {
-        courseFields.maximum_attendee_capacity = parseInt(values.maximum_attendee_capacity, 10)
+        courseFields.maximum_attendee_capacity = parseInt(
+            values.maximum_attendee_capacity,
+            10
+        )
     }
     obj.extension_course = courseFields
 
     return obj
-
-    /*
-    'date_published': DATETIME, // Not required at the moment...
-    */
 }
 
 function mapAPIDataToUIFormat(values) {
-    if(!values) {
+    if (!values) {
         return {}
     }
 
@@ -198,7 +216,7 @@ function mapAPIDataToUIFormat(values) {
 
     obj.location_extra_info = values.location_extra_info
 
-    if(values.offers) {
+    if (values.offers) {
         obj.offers = values.offers
     }
 
@@ -210,48 +228,51 @@ function mapAPIDataToUIFormat(values) {
     let keywords = cloneDeep(values.keywords)
 
     let hel_main_items = remove(keywords, item => {
-        return (item.id.indexOf('helfi:') > -1)
+        return item.id.indexOf('helfi:') > -1
     })
 
-    obj.hel_main = map(hel_main_items, (item) => { return item['@id'] })
+    obj.hel_main = map(hel_main_items, item => {
+        return item['@id']
+    })
 
     // Keywords, audience, languages
-    obj.keywords = map(keywords, (item) => ({value: item['@id'], label: (getStringWithLocale(item, 'name') || item['id'])}))
+    obj.keywords = map(keywords, item => ({
+        value: item['@id'],
+        label: getStringWithLocale(item, 'name') || item['id'],
+    }))
 
-    // Filter somehow the hel_main keyword values from keywords
-    // obj.keywords = filter(obj.keywords, (item) => {
-    //     console.log(obj.hel_main.indexOf(item.value) === -1)
-    //     return (obj.hel_main.indexOf(item.value) === -1)
-    // });
-
-    if(values.audience) {
+    if (values.audience) {
         obj.audience = map(values.audience, item => item['@id'])
     }
 
-    if(values.in_language) {
+    if (values.in_language) {
         obj.in_language = map(values.in_language, lang => lang['@id'])
     }
 
     // External links
-    if(values.external_links) {
-        let externalLinkFields = ['extlink_facebook', 'extlink_twitter', 'extlink_instagram']
+    if (values.external_links) {
+        let externalLinkFields = [
+            'extlink_facebook',
+            'extlink_twitter',
+            'extlink_instagram',
+        ]
         externalLinkFields.forEach(item => {
             let extlink = find(values.external_links, {name: item})
-            if(extlink) {
+            if (extlink) {
                 obj[item] = extlink.link
             }
         })
     }
 
-    if(values.start_time) {
+    if (values.start_time) {
         obj.start_time = values.start_time
     }
 
-    if(values.end_time) {
+    if (values.end_time) {
         obj.end_time = values.end_time
     }
 
-    if(values.images) {
+    if (values.images) {
         obj.image = values.images[0]
     }
 
@@ -264,12 +285,17 @@ function mapAPIDataToUIFormat(values) {
 
     // course extension fields
     const courseFields = [
-        'enrolment_start_time', 'enrolment_end_time', 'minimum_attendee_capacity', 'maximum_attendee_capacity',
-    ];
+        'enrolment_start_time',
+        'enrolment_end_time',
+        'minimum_attendee_capacity',
+        'maximum_attendee_capacity',
+    ]
     courseFields.forEach(field => {
-        const value = values['extension_course'][field]
-        if (value) {
-            obj[field] = value
+        if (values['extension_course']) {
+            const value = values['extension_course'][field]
+            if (value) {
+                obj[field] = value
+            }
         }
     })
 
@@ -282,7 +308,7 @@ function mapAPIDataToUIFormat(values) {
     - earliest date of sub events as start_time
     - latest date of sub events as end_time
 */
-export const calculateSuperEventTime = (subEvents) => {
+export const calculateSuperEventTime = subEvents => {
     let startTimes = []
     let endTimes = []
     values(subEvents).filter(event => {
@@ -295,30 +321,44 @@ export const calculateSuperEventTime = (subEvents) => {
     })
     // in case there is no end_time in sub events should return the
     // midnight of the day after the latest start time as super event endtime
-    const superEventStartTime = startTimes.length <= 0 ? undefined : moment.min(startTimes);
-    let superEventEndTime = endTimes.length <= 0
-        ? startTimes.length <= 0
-            ? undefined    
-            : moment.max(startTimes).endOf('day')
-        : moment.max(endTimes)
+    const superEventStartTime =
+        startTimes.length <= 0 ? undefined : moment.min(startTimes)
+    let superEventEndTime =
+        endTimes.length <= 0
+            ? startTimes.length <= 0
+                ? undefined
+                : moment.max(startTimes).endOf('day')
+            : moment.max(endTimes)
     return {
         start_time: superEventStartTime
-            ? moment.tz(superEventStartTime, 'Europe/Helsinki').utc().toISOString()
+            ? moment
+                .tz(superEventStartTime, 'Europe/Helsinki')
+                .utc()
+                .toISOString()
             : undefined,
         end_time: superEventEndTime
-            ? moment.tz(superEventEndTime, 'Europe/Helsinki').utc().toISOString()
+            ? moment
+                .tz(superEventEndTime, 'Europe/Helsinki')
+                .utc()
+                .toISOString()
             : undefined,
     }
 }
 
 // combine all dates in the editor form to get a collection of sub events under super
-export const combineSubEventsFromEditor = (formValues, updateExisting = false) => {
+export const combineSubEventsFromEditor = (
+    formValues,
+    updateExisting = false
+) => {
     let subEvents
     if (updateExisting) {
         subEvents = formValues.sub_events
     } else {
         subEvents = {
-            '0': {start_time: formValues.start_time, end_time: formValues.end_time},
+            '0': {
+                start_time: formValues.start_time,
+                end_time: formValues.end_time,
+            },
             ...formValues.sub_events,
         }
     }
