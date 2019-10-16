@@ -657,6 +657,7 @@ export function cancelEvent(eventId, user, values) {
 
     return (dispatch, getState) => {
         let url = `${appSettings.api_base}/event/${eventId}/`
+        const apikey = localStorage.getItem('apikey');
 
         let token = ''
         if (user) {
@@ -673,6 +674,7 @@ export function cancelEvent(eventId, user, values) {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 Authorization: 'JWT ' + token,
+                apikey: apikey,
             },
             body: JSON.stringify(data),
         })
@@ -751,6 +753,8 @@ export function deleteEvent(eventID, user, values, recursing = false) {
         token = user.token
     }
     const isSuperEvent = values.super_event_type === 'recurring'
+    const apikey = localStorage.getItem('apikey');
+
 
     return (dispatch, getState) => {
         return fetch(url, {
@@ -759,6 +763,7 @@ export function deleteEvent(eventID, user, values, recursing = false) {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 Authorization: 'JWT ' + token,
+                apikey: apikey,
             },
         })
             .then(response => {
