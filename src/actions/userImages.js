@@ -23,6 +23,7 @@ function makeRequest(organization, pg_size) {
 }
 
 function getRequestBaseSettings(user, method = 'POST', imageId = null) {
+    const apikey = localStorage.getItem('apikey');
     let token = user ? user.token : ''
 
     let url = appSettings.api_base + '/image/'
@@ -36,7 +37,7 @@ function getRequestBaseSettings(user, method = 'POST', imageId = null) {
         'url': url,
         'method': method,
         'headers': {
-            'authorization': 'JWT ' + token,
+            'apikey': apikey,
             'accept': 'application/json',
         },
         'processData': false,
