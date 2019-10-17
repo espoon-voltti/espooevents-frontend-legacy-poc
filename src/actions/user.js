@@ -41,7 +41,7 @@ export function retrieveUserFromSession() {
                 if (user.token) {
                     const settings = {
                         headers: {
-                            Authorization: 'JWT ' + user.token,
+                            // Authorization: 'JWT ' + user.token,
                         },
                     }
                     return fetch(

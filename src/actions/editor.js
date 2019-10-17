@@ -19,7 +19,7 @@ import {fetchSubEventsForSuper} from './subEvents'
 
 /**
  * Set editor form data
- * @param {obj} formValues      new form values
+ * @param {obj} formValues new form values
  */
 export function setData(values) {
     return {
@@ -365,7 +365,7 @@ const executeSendRequest = (
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: 'JWT ' + token,
+                // Authorization: 'JWT ' + token,
                 apikey: apikey,
             },
             body: JSON.stringify(preparedFormValues),
@@ -629,7 +629,7 @@ export function fetchEventForEditing(eventID, user = {}) {
 
     if (user && user.token) {
         Object.assign(options.headers, {
-            Authorization: 'JWT ' + user.token,
+            // Authorization: 'JWT ' + user.token,
         })
     }
 
@@ -657,6 +657,7 @@ export function cancelEvent(eventId, user, values) {
 
     return (dispatch, getState) => {
         let url = `${appSettings.api_base}/event/${eventId}/`
+        const apikey = localStorage.getItem('apikey')
 
         let token = ''
         if (user) {
@@ -672,7 +673,8 @@ export function cancelEvent(eventId, user, values) {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: 'JWT ' + token,
+                // Authorization: 'JWT ' + token,
+                apikey: apikey,
             },
             body: JSON.stringify(data),
         })
@@ -751,6 +753,7 @@ export function deleteEvent(eventID, user, values, recursing = false) {
         token = user.token
     }
     const isSuperEvent = values.super_event_type === 'recurring'
+    const apikey = localStorage.getItem('apikey')
 
     return (dispatch, getState) => {
         return fetch(url, {
@@ -758,7 +761,8 @@ export function deleteEvent(eventID, user, values, recursing = false) {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: 'JWT ' + token,
+                // Authorization: 'JWT ' + token,
+                apikey: apikey,
             },
         })
             .then(response => {
