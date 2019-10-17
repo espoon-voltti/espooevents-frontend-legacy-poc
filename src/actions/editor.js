@@ -365,7 +365,7 @@ const executeSendRequest = (
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: 'JWT ' + token,
+                // Authorization: 'JWT ' + token,
                 apikey: apikey,
             },
             body: JSON.stringify(preparedFormValues),
@@ -629,7 +629,7 @@ export function fetchEventForEditing(eventID, user = {}) {
 
     if (user && user.token) {
         Object.assign(options.headers, {
-            Authorization: 'JWT ' + user.token,
+            // Authorization: 'JWT ' + user.token,
         })
     }
 
@@ -673,7 +673,7 @@ export function cancelEvent(eventId, user, values) {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: 'JWT ' + token,
+                // Authorization: 'JWT ' + token,
                 apikey: apikey,
             },
             body: JSON.stringify(data),
@@ -762,7 +762,7 @@ export function deleteEvent(eventID, user, values, recursing = false) {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: 'JWT ' + token,
+                // Authorization: 'JWT ' + token,
                 apikey: apikey,
             },
         })
