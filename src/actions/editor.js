@@ -19,7 +19,7 @@ import {fetchSubEventsForSuper} from './subEvents'
 
 /**
  * Set editor form data
- * @param {obj} formValues      new form values
+ * @param {obj} formValues new form values
  */
 export function setData(values) {
     return {
@@ -657,7 +657,7 @@ export function cancelEvent(eventId, user, values) {
 
     return (dispatch, getState) => {
         let url = `${appSettings.api_base}/event/${eventId}/`
-        const apikey = localStorage.getItem('apikey');
+        const apikey = localStorage.getItem('apikey')
 
         let token = ''
         if (user) {
@@ -753,8 +753,7 @@ export function deleteEvent(eventID, user, values, recursing = false) {
         token = user.token
     }
     const isSuperEvent = values.super_event_type === 'recurring'
-    const apikey = localStorage.getItem('apikey');
-
+    const apikey = localStorage.getItem('apikey')
 
     return (dispatch, getState) => {
         return fetch(url, {
