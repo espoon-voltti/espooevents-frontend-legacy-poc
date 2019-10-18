@@ -10,12 +10,6 @@
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 
-// @import "node_modules/bootstrap/scss/mixins/_label.scss";
-// @import "node_modules/bootstrap/scss/_labels.scss";
-
-// Define a custom sass file to override any variables defined in scaffolding.scss
-// @import "my-custom-overrides.scss";
-
 // Login window
 
 #login-window {
@@ -281,3 +275,4 @@ header {
         bottom: 1em;
     }
 }
+
