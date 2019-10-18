@@ -81,6 +81,67 @@
 
 // Rest of the styles
 
+// Login window
+
+#login-window {
+    box-shadow: 0px 0px 15px #6f6f6f;
+    width: 500px;
+    height: 400px;
+    position: fixed;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, 0);
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+#login-window input {
+    width: 250px;
+    height: 40px;
+    margin: 5px 0px;
+    border-radius: 20px;
+}
+
+#login-send {
+    background: rgb(108, 178, 230);
+    background: linear-gradient(
+        90deg,
+        rgba(108, 178, 230, 1) 0%,
+        rgba(64, 161, 233, 1) 35%,
+        rgba(0, 114, 198, 1) 100%
+    );
+    color: #fff;
+    margin-top: 15px !important;
+}
+
+#login-window :focus {
+    outline: 0;
+}
+
+.login-warning {
+    text-align: center;
+}
+
+.login-block {
+    width: 100%;
+}
+
+.login-block input {
+    padding: 0px 20px;
+}
+
+.login-welcome {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+// Rest of the styles
+
 .well {
     min-height: 20px;
     padding: 19px;
@@ -275,4 +336,3 @@ header {
         bottom: 1em;
     }
 }
-

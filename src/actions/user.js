@@ -100,3 +100,4 @@ export function logout() {
 export function loggedInUser() {
     return localStorage.getItem('apikey') ? true : false
 }
+
