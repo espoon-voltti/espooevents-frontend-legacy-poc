@@ -6,9 +6,12 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {withRouter} from 'react-router'
+import {App} from 'src/views/app'
 
 import {login, logout, loggedInUser} from 'src/actions/user.js'
 import {setLocale as setLocaleAction} from 'src/actions/userLocale'
+import {showLogin} from 'src/actions/app'
+import {makeLoginVisible} from 'src/actions/app'
 
 import {FormattedMessage} from 'react-intl'
 
@@ -37,6 +40,10 @@ import CONSTANTS from '../../constants'
 import cityOfEspooLogo from '../../assets/images/espoo-logo.svg'
 
 class HeaderBar extends React.Component {
+    static contextTypes = {
+        dispatch: PropTypes.func,
+    }
+
     state = {
         navBarOpen: false,
     }
@@ -52,6 +59,10 @@ class HeaderBar extends React.Component {
     getNavigateMobile = navigate => () => {
         navigate()
         this.toggleNavbar()
+    }
+
+    dispatchLoginVisible = () => {
+        this.context.dispatch(makeLoginVisible())
     }
 
     render() {
@@ -88,13 +99,13 @@ class HeaderBar extends React.Component {
                                 </Select>
                             </div>
                         </div>
-                        {loggedInUser() ? (
+                        {user ? (
                             <Button onClick={() => logout()}>
                                 <Person />
                                 <FormattedMessage id="logout" />
                             </Button>
                         ) : (
-                            <Button onClick={() => login()}>
+                            <Button onClick={() => this.dispatchLoginVisible()}>
                                 <Person />
                                 <FormattedMessage id="login" />
                             </Button>
@@ -186,6 +197,10 @@ const NavLinks = props => {
     )
 }
 
+// App.propTypes = {
+//     dispatch: PropTypes.func,
+// }
+
 NavLinks.propTypes = {
     toMainPage: PropTypes.func,
     toSearchPage: PropTypes.func,
@@ -201,11 +216,13 @@ HeaderBar.propTypes = {
     userLocale: PropTypes.object,
     setLocale: PropTypes.func,
     location: PropTypes.object,
+    // makeLoginVisible: PropTypes.func,
 }
 
 const mapStateToProps = state => ({
     user: state.user,
     userLocale: state.userLocale,
+    // app: state.app,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -213,6 +230,7 @@ const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(logout()),
     routerPush: url => dispatch(push(url)),
     setLocale: locale => dispatch(setLocaleAction(locale)),
+    // makeLoginVisible: () => dispatch(makeLoginVisible()),
 })
 
 export default withRouter(

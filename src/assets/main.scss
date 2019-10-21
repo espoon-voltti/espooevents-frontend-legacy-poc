@@ -33,6 +33,7 @@
     justify-content: center;
     align-items: center;
     padding: 25px;
+    z-index: 99;
 }
 
 #login-window input {
@@ -52,10 +53,19 @@
     );
     color: #fff;
     margin-top: 15px !important;
+    border: none;
 }
 
 #login-window :focus {
     outline: 0;
+}
+
+.login-close {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    cursor: pointer;
+    width: 30px;
 }
 
 .login-warning {
