@@ -1,5 +1,8 @@
 import constants from '../constants'
 
+import {clearUserData, receiveUserData} from './user'
+import {mockUser} from '../../__mocks__/mockData'
+
 export function setFlashMsg(msg, style = 'message', data = {}) {
     // type can be 'message' or 'error'
     return {
@@ -17,7 +20,12 @@ export function clearFlashMsg() {
     }
 }
 
-export function confirmAction(msg, style = 'warning', actionButtonLabel, data = {}) {
+export function confirmAction(
+    msg,
+    style = 'warning',
+    actionButtonLabel,
+    data = {}
+) {
     // type can be 'message' or 'error'
     //
     // data is an obj {
@@ -33,7 +41,7 @@ export function confirmAction(msg, style = 'warning', actionButtonLabel, data = 
 }
 
 export function doAction(data) {
-    if(data && data.action && typeof data.action === 'function') {
+    if (data && data.action && typeof data.action === 'function') {
         data.action()
     }
 
@@ -45,5 +53,42 @@ export function doAction(data) {
 export function cancelAction() {
     return {
         type: constants.APP_CANCEL_ACTION,
+    }
+}
+
+export function showLogin() {
+    return {
+        type: constants.DISPLAY_LOGIN,
+    }
+}
+
+export function hideLogin() {
+    return {
+        type: constants.HIDE_LOGIN,
+    }
+}
+
+export function makeLoginVisible() {
+    return dispatch => {
+        // dispatch(showLogin())
+        dispatch({type: constants.DISPLAY_LOGIN})
+    }
+}
+
+export function login() {
+    return dispatch => {
+        // dispatch(showLogin())
+        dispatch({type: constants.HIDE_LOGIN})
+        dispatch({
+            type: constants.RECEIVE_USERDATA,
+            payload: mockUser,
+        })
+    }
+}
+
+export function logout() {
+    localStorage.removeItem('apikey')
+    return dispatch => {
+        dispatch(clearUserData())
     }
 }
