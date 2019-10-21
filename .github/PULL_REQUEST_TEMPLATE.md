@@ -16,7 +16,7 @@
 - [ ] Tests have been written for the change
 - [ ] All tests pass (unit, e2e)
 - [ ] All code has been linted and there aren't any lint errors
-- [ ] The change has been tested in the browser with Firefox 59+, Chrome 66+
+- [ ] The change has been tested in the browser with Firefox 59+ and Chrome 66+
 - [ ] The change has been tested with a smaller screen (tablet)
 - [ ] The change conforms to the [UX specifications](https://voltti.atlassian.net/wiki/spaces/NUORA/pages/74809369/UX)
 - [ ] All translations have been added (fi, sv, en)
