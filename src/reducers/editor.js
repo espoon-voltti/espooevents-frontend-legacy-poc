@@ -28,7 +28,7 @@ const initialState = {
     languages: languages,
     contentLanguages: ['fi'],
     keywordSets: keywordSets,
-    validationErrors: {},
+    validationerrors: {},
     validateFor: null,
     isSending: false,
 }
@@ -66,14 +66,14 @@ function update(state = initialState, action) {
         } else {
             newValues = Object.assign({}, state.values, action.values)
         }
-    
+
         // Local storage saving disabled for now
         // localStorage.setItem('EDITOR_VALUES', JSON.stringify(newValues))
-    
-        let validationErrors = Object.assign({}, state.validationErrors)
+
+        let validationerrors = Object.assign({}, state.validationerrors)
         // If there are validation errors, check if they are fixed
-        if (_.keys(state.validationErrors).length > 0) {
-            validationErrors = doValidations(newValues, state.contentLanguages, state.validateFor || constants.PUBLICATION_STATUS.PUBLIC)
+        if (_.keys(state.validationerrors).length > 0) {
+            validationerrors = doValidations(newValues, state.contentLanguages, state.validateFor || constants.PUBLICATION_STATUS.PUBLIC)
         }
 
         if (action.event) {
@@ -85,7 +85,7 @@ function update(state = initialState, action) {
                         },
                     },
                 },
-                validationErrors: {$set: validationErrors},
+                validationerrors: {$set: validationerrors},
             });
         } else if (action.offer) {
             return updater(state, {
@@ -96,13 +96,13 @@ function update(state = initialState, action) {
                         },
                     },
                 },
-                validationErrors: {$set: validationErrors},
+                validationerrors: {$set: validationerrors},
             });
         }
 
         return Object.assign({}, state, {
             values: newValues,
-            validationErrors: validationErrors,
+            validationerrors: validationerrors,
         })
     }
 
@@ -115,16 +115,16 @@ function update(state = initialState, action) {
                 },
             },
         })
-        
-        let validationErrors = Object.assign({}, state.validationErrors)
+
+        let validationerrors = Object.assign({}, state.validationerrors)
         // If there are validation errors in sub_events, check if they are fixed
-        if (state.validationErrors.sub_events) {
-            validationErrors = doValidations(newValues, state.contentLanguages, state.validateFor || constants.PUBLICATION_STATUS.PUBLIC)
+        if (state.validationerrors.sub_events) {
+            validationerrors = doValidations(newValues, state.contentLanguages, state.validateFor || constants.PUBLICATION_STATUS.PUBLIC)
         }
 
         const x = Object.assign({}, state, {
             values: newValues,
-            validationErrors,
+            validationerrors,
         })
         return x
     }
@@ -242,7 +242,7 @@ function update(state = initialState, action) {
 
         return Object.assign({}, state, {
             values: editorValues,
-            validationErrors: {},
+            validationerrors: {},
             validateFor: null,
             validationStatus: constants.VALIDATION_STATUS.CLEARED,
         })
@@ -302,7 +302,7 @@ function update(state = initialState, action) {
 
     if (action.type === constants.SET_VALIDATION_ERRORS) {
         return Object.assign({}, state, {
-            validationErrors: action.errors,
+            validationerrors: action.errors,
             validationStatus: constants.VALIDATION_STATUS.RESOLVE,
             isSending: false,
         })

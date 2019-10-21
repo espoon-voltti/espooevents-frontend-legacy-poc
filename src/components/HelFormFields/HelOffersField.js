@@ -76,7 +76,7 @@ class HelOffersField extends React.Component {
                         key={key}
                         offerKey={key}
                         defaultValue={this.props.defaultValue[key]}
-                        validationErrors={this.props.validationErrors}
+                        validationerrors={this.props.validationerrors}
                         languages={this.props.languages}
                         isFree={this.state.isFree}
                     />
@@ -110,7 +110,7 @@ class HelOffersField extends React.Component {
 
 HelOffersField.propTypes = {
     defaultValue: PropTypes.array,
-    validationErrors: PropTypes.oneOfType([
+    validationerrors: PropTypes.oneOfType([
         PropTypes.array,
         PropTypes.object,
     ]),

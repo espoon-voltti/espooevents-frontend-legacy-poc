@@ -17,13 +17,13 @@ class HelLabeledCheckboxGroup extends React.Component {
 
         this.handleChange = this.handleChange.bind(this)
     }
-    
+
     handleChange() {
         const {options} = this.props
 
         let checked = options.reduce((ac, op, index) => {
             if(this[`checkRef${index}`].checked) {
-                ac.push(this[`checkRef${index}`]) 
+                ac.push(this[`checkRef${index}`])
             }
             return ac
         }, [])
@@ -76,7 +76,7 @@ class HelLabeledCheckboxGroup extends React.Component {
         // view half-width checkboxes in two columns
         const left_column = checkboxes.slice(0, Math.floor((checkboxes.length + 1) / 2))
         const right_column = checkboxes.slice(Math.floor((checkboxes.length + 1) / 2), checkboxes.length)
-        
+
         checkboxes = [
             <div className="left_column col-sm-6" key="1">{left_column}</div>,
             <div className="right_column col-sm-6" key="2">{right_column}</div>,
@@ -84,7 +84,7 @@ class HelLabeledCheckboxGroup extends React.Component {
 
         return (
             <fieldset className="checkbox-group col-lg-6">
-                <div><span className="legend" style={{position:'relative', width:'auto'}}>{this.props.groupLabel} <ValidationPopover validationErrors={this.props.validationErrors} /></span></div>
+                <div><span className="legend" style={{position:'relative', width:'auto'}}>{this.props.groupLabel} <ValidationPopover validationerrors={this.props.validationerrors} /></span></div>
                 <div className='row'>
                     {checkboxes}
                 </div>
@@ -106,7 +106,7 @@ HelLabeledCheckboxGroup.propTypes = {
     options: PropTypes.array,
     itemClassName: PropTypes.string,
     groupLabel: PropTypes.object,
-    validationErrors: PropTypes.oneOfType([
+    validationerrors: PropTypes.oneOfType([
         PropTypes.array,
         PropTypes.object,
     ]),

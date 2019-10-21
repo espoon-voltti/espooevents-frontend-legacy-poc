@@ -17,7 +17,7 @@ import CONSTANTS from '../../constants'
 class HelDateTimeField extends React.Component {
     constructor(props) {
         super(props)
-        
+
         let defaultValue = this.props.defaultValue || null
         if(moment(defaultValue).isValid()) {
             defaultValue = moment(defaultValue).tz('Europe/Helsinki');
@@ -51,8 +51,8 @@ class HelDateTimeField extends React.Component {
         }
         const time = this.state.time
         let errors = [
-            this.getValidationErrors(CONSTANTS.VALIDATION_RULES.IS_TIME, time),
-            this.getValidationErrors(CONSTANTS.VALIDATION_RULES.IS_DATE, date),
+            this.getvalidationerrors(CONSTANTS.VALIDATION_RULES.IS_TIME, time),
+            this.getvalidationerrors(CONSTANTS.VALIDATION_RULES.IS_DATE, date),
         ]
 
         // Filter out empty lists
@@ -113,7 +113,7 @@ class HelDateTimeField extends React.Component {
         }
     }
 
-    getValidationErrors(type, value) {
+    getvalidationerrors(type, value) {
         if(value && type) {
             let validations;
             if(typeof validationRules[type] === 'function') {
@@ -148,7 +148,7 @@ class HelDateTimeField extends React.Component {
         return (
             <div className="multi-field">
                 <div className="indented">
-                    <label style={{position: 'relative'}}><FormattedMessage id={`${this.props.label}`} /> <ValidationPopover validationErrors={this.props.validationErrors} /></label>
+                    <label style={{position: 'relative'}}><FormattedMessage id={`${this.props.label}`} /> <ValidationPopover validationerrors={this.props.validationerrors} /></label>
                     <HelDatePicker {...this.props.datePickerProps} ref="date" name={this.props.name} defaultValue={this.state.date} validations={[CONSTANTS.VALIDATION_RULES.IS_DATE]} placeholder="pp.kk.vvvv" onChange={this.onChange} onBlur={this.onBlur} label={<FormattedMessage id="date" />} />
                     <HelTimePicker {...this.props.timePickerProps} ref="time" name={this.props.name} defaultValue={this.state.time} validations={[CONSTANTS.VALIDATION_RULES.IS_TIME]} placeholder="hh.mm" onChange={this.onChange} onBlur={this.onBlur} label={<FormattedMessage id="time" />} />
                 </div>
@@ -163,7 +163,7 @@ HelDateTimeField.propTypes = {
     defaultValue: PropTypes.string,
     setDirtyState: PropTypes.func,
     label: PropTypes.string,
-    validationErrors: PropTypes.oneOfType([
+    validationerrors: PropTypes.oneOfType([
         PropTypes.array,
         PropTypes.object,
     ]),

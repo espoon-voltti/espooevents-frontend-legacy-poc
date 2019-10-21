@@ -36,14 +36,14 @@ class MultiLanguageField extends React.Component {
         disabled: PropTypes.bool,
         required: PropTypes.bool,
         validations: PropTypes.array,
-        validationErrors: PropTypes.oneOfType([
+        validationerrors: PropTypes.oneOfType([
             PropTypes.array,
             PropTypes.object,
         ]),
         index: PropTypes.string,
         multiLine: PropTypes.bool,
     }
-    
+
     onChange(e,value,lang) {
         this.setState({value: this.getValue()})
 
@@ -58,7 +58,7 @@ class MultiLanguageField extends React.Component {
         if(this.props.name) {
             let obj = {}
             obj[this.props.name] = this.getValue()
-            if(this.noValidationErrors() || this.props.forceApplyToStore) {
+            if(this.novalidationerrors() || this.props.forceApplyToStore) {
                 this.context.dispatch(setData(obj))
             }
 
@@ -81,8 +81,8 @@ class MultiLanguageField extends React.Component {
         return valueObj
     }
 
-    noValidationErrors() {
-        let errors = _.map(this.refs, elem => elem.getValidationErrors().length)
+    novalidationerrors() {
+        let errors = _.map(this.refs, elem => elem.getvalidationerrors().length)
         errors = errors.filter(errorCount => (errorCount > 0))
 
         return (errors.length === 0)
@@ -124,7 +124,7 @@ class MultiLanguageField extends React.Component {
                         onBlur={(e,v) => this.onBlur(e,v)}
                         disabled={this.props.disabled}
                         validations={this.props.validations}
-                        validationErrors={this.props.validationErrors}
+                        validationerrors={this.props.validationerrors}
                         index={this.props.index}
                         multiLine={this.props.multiLine} />
                 </div>
@@ -134,14 +134,14 @@ class MultiLanguageField extends React.Component {
                 let value = this.state.value[lang]
                 return (
                     <div key={`${props.name}_${lang}`}>
-                        <HelTextField 
-                            multiLine={this.props.multiLine} 
-                            required={this.props.required} 
-                            defaultValue={value} ref={lang} 
-                            label={this.context.intl.formatMessage({id: `in-${lang}`})} 
-                            onChange={(e,v) => this.onChange(e,v,lang)} 
-                            onBlur={(e,v) => this.onBlur(e,v)} 
-                            disabled={this.props.disabled} 
+                        <HelTextField
+                            multiLine={this.props.multiLine}
+                            required={this.props.required}
+                            defaultValue={value} ref={lang}
+                            label={this.context.intl.formatMessage({id: `in-${lang}`})}
+                            onChange={(e,v) => this.onChange(e,v,lang)}
+                            onBlur={(e,v) => this.onBlur(e,v)}
+                            disabled={this.props.disabled}
                             validations={this.props.validations}
                         />
                     </div>
@@ -152,7 +152,7 @@ class MultiLanguageField extends React.Component {
         return (
             <div className="multi-field">
                 <div className="indented">
-                    <label><FormattedMessage id={`${props.label}`} /><ValidationPopover validationErrors={this.props.validationErrors} index={this.props.index} /></label>
+                    <label><FormattedMessage id={`${props.label}`} /><ValidationPopover validationerrors={this.props.validationerrors} index={this.props.index} /></label>
                     {textInputs}
                 </div>
             </div>

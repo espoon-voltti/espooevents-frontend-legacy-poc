@@ -36,7 +36,7 @@ class HelTextField extends React.Component {
         let isShortString = _.find(this.props.validations, i => i === VALIDATION_RULES.SHORT_STRING)
         let isMediumString = _.find(this.props.validations, i => i === VALIDATION_RULES.MEDIUM_STRING)
         let isLongString = _.find(this.props.validations, i => i === VALIDATION_RULES.LONG_STRING)
-        
+
         let limit
         if (!this.state.error && (isShortString || isMediumString || isLongString)) {
             if(isShortString) {
@@ -44,13 +44,13 @@ class HelTextField extends React.Component {
             }
             else if(isMediumString) {
                 limit = CONSTANTS.CHARACTER_LIMIT.MEDIUM_STRING
-            } 
+            }
             else if(isLongString) {
                 limit = CONSTANTS.CHARACTER_LIMIT.LONG_STRING
             }
-            
+
             const diff =  limit - this.state.value.length.toString()
-            
+
             if(diff >= 0) {
                 return this.context.intl.formatMessage({id: 'validation-stringLengthCounter'}, {counter: diff})
             }
@@ -77,7 +77,7 @@ class HelTextField extends React.Component {
         })
 
         this.recalculateHeight()
-        this.setValidationErrorsToState()
+        this.setvalidationerrorsToState()
 
         if(typeof this.props.onChange === 'function') {
             this.props.onChange(event, this.inputRef.value)
@@ -100,7 +100,7 @@ class HelTextField extends React.Component {
     }
     handleBlur(event) {
     // Apply changes to store if no validation errors, or the props 'forceApplyToStore' is defined
-        if( this.props.name && this.getValidationErrors().length === 0 &&
+        if( this.props.name && this.getvalidationerrors().length === 0 &&
             !this.props.name.includes('time') ||
             this.props.name && this.props.forceApplyToStore) {
             let obj = {}
@@ -117,7 +117,7 @@ class HelTextField extends React.Component {
     }
 
     componentDidMount() {
-        this.setValidationErrorsToState()
+        this.setvalidationerrorsToState()
         this.recalculateHeight()
     }
 
@@ -128,7 +128,7 @@ class HelTextField extends React.Component {
         }
     }
 
-    getValidationErrors() {
+    getvalidationerrors() {
         if(this.inputRef && this.inputRef.value && this.props.validations && this.props.validations.length) {
             let validations = this.props.validations.map(item => {
                 if(typeof validationRules[item] === 'function') {
@@ -158,10 +158,10 @@ class HelTextField extends React.Component {
         this.recalculateHeight()
     }
 
-    setValidationErrorsToState() {
+    setvalidationerrorsToState() {
         const {VALIDATION_RULES, CHARACTER_LIMIT} = CONSTANTS
 
-        let errors = this.getValidationErrors()
+        let errors = this.getvalidationerrors()
 
         if(errors.length > 0) {
             let limit
@@ -177,17 +177,17 @@ class HelTextField extends React.Component {
                     limit = CHARACTER_LIMIT.LONG_STRING
                     break;
             }
-            
+
             return limit ? this.setState({error: this.context.intl.formatMessage({id: `validation-stringLimitReached`}, {limit})}) :
-                this.setState({error: this.context.intl.formatMessage({id: `validation-${errors[0].rule}`})}) 
+                this.setState({error: this.context.intl.formatMessage({id: `validation-${errors[0].rule}`})})
         }
         else {
             this.setState({error: null})
         }
     }
 
-    noValidationErrors() {
-        let errors = this.getValidationErrors()
+    novalidationerrors() {
+        let errors = this.getvalidationerrors()
         return (errors.length === 0)
     }
 
@@ -202,7 +202,7 @@ class HelTextField extends React.Component {
             requiredElem = (<span>*</span>)
         }
 
-        label = (<span style={{position: 'relative'}}>{label} {requiredElem} <ValidationPopover small={true} validationErrors={this.props.validationErrors} index={this.props.index} /></span>)
+        label = (<span style={{position: 'relative'}}>{label} {requiredElem} <ValidationPopover small={true} validationerrors={this.props.validationerrors} index={this.props.index} /></span>)
 
         let groupClassName = 'hel-text-field'
         if(this.props.disabled) {
@@ -258,7 +258,7 @@ HelTextField.propTypes = {
         PropTypes.string,
         PropTypes.object,
     ]),
-    validationErrors: PropTypes.oneOfType([
+    validationerrors: PropTypes.oneOfType([
         PropTypes.array,
         PropTypes.object,
     ]),

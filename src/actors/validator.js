@@ -11,7 +11,7 @@ export default (store) => {
     const {editor, router, userLocale: {locale}} = store.getState()
     const dispatch = store.dispatch
 
-    let errorCount = _.keys(editor.validationErrors).length;
+    let errorCount = _.keys(editor.validationerrors).length;
 
     if(errorCount > 0 && wasErrors === false) {
         wasErrors = true

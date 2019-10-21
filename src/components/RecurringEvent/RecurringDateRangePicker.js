@@ -27,7 +27,7 @@ class RecurringDateRangePicker extends React.Component {
     onBlur() {
         return
     }
-    getValidationErrors(type, value) {
+    getvalidationerrors(type, value) {
         if(value && type) {
             let validations;
             if(typeof validationRules[type] === 'function') {
@@ -56,7 +56,7 @@ class RecurringDateRangePicker extends React.Component {
     render () {
         return (
             <Col xs={12} sm={6}>
-                <label><FormattedMessage id={`${this.props.label}`} /> <ValidationPopover validationErrors={this.props.validationErrors} /></label>
+                <label><FormattedMessage id={`${this.props.label}`} /> <ValidationPopover validationerrors={this.props.validationerrors} /></label>
                 <HelDatePicker ref="date" name={this.props.name} defaultValue={this.state.date} validations={[CONSTANTS.VALIDATION_RULES.IS_DATE]} placeholder="pp.kk.vvvv" onChange={this.onChange} onBlur={this.onBlur} label={<FormattedMessage id="date" />} />
             </Col>
         )
@@ -71,7 +71,7 @@ RecurringDateRangePicker.propTypes = {
     name: PropTypes.string,
     onChange: PropTypes.func,
     label: PropTypes.string,
-    validationErrors: PropTypes.oneOfType([
+    validationerrors: PropTypes.oneOfType([
         PropTypes.array,
         PropTypes.object,
     ]),

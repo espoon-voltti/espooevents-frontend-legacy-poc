@@ -892,7 +892,7 @@ export const mockEditorNewEvent = {
         'fi',
     ],
     keywordSets: mockKeywordSets.slice(0, 3),
-    validationErrors: {},
+    validationerrors: {},
     validateFor: null,
     isSending: false,
 };
@@ -1065,7 +1065,7 @@ export const mockEditorExistingEvent = {
         'sv',
     ],
     keywordSets: mockKeywordSets,
-    validationErrors: {},
+    validationerrors: {},
     validateFor: null,
     isSending: false,
     validationStatus: 'resolve',

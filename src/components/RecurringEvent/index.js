@@ -5,7 +5,7 @@ import RecurringDateRangePicker from './RecurringDateRangePicker'
 import RecurringTimePicker from './RecurringTimePicker'
 import {FormattedMessage} from 'react-intl'
 import moment from 'moment'
-import {some, values, forEach, isEmpty} from 'lodash' 
+import {some, values, forEach, isEmpty} from 'lodash'
 
 import DayCheckbox from './DayCheckbox'
 // Material-ui Icons
@@ -34,7 +34,7 @@ class RecurringEvent extends React.Component {
     static propTypes = {
         values: PropTypes.object,
         toggle: PropTypes.func,
-        validationErrors: PropTypes.oneOfType([
+        validationerrors: PropTypes.oneOfType([
             PropTypes.array,
             PropTypes.object,
         ]),
@@ -109,13 +109,13 @@ class RecurringEvent extends React.Component {
         const VALIDATION_RULES = CONSTANTS.VALIDATION_RULES
 
         let errors = [
-            this.getValidationErrors(VALIDATION_RULES.AFTER_START_TIME, endDateTestObject),
-            this.getValidationErrors(VALIDATION_RULES.DAY_WITHIN_INTERVAL, intervalTestObject),
-            this.getValidationErrors(VALIDATION_RULES.IS_DATE, moment(recurringStartDate).format('YYYY-MM-DD')),
-            this.getValidationErrors(VALIDATION_RULES.IS_TIME, recurringStartTime),
-            this.getValidationErrors(VALIDATION_RULES.IS_TIME, recurringEndTime),
-            this.getValidationErrors(VALIDATION_RULES.IS_MORE_THAN_ONE, weekInterval),
-            this.getValidationErrors(VALIDATION_RULES.AT_LEAST_ONE_IS_TRUE, daysSelected),
+            this.getvalidationerrors(VALIDATION_RULES.AFTER_START_TIME, endDateTestObject),
+            this.getvalidationerrors(VALIDATION_RULES.DAY_WITHIN_INTERVAL, intervalTestObject),
+            this.getvalidationerrors(VALIDATION_RULES.IS_DATE, moment(recurringStartDate).format('YYYY-MM-DD')),
+            this.getvalidationerrors(VALIDATION_RULES.IS_TIME, recurringStartTime),
+            this.getvalidationerrors(VALIDATION_RULES.IS_TIME, recurringEndTime),
+            this.getvalidationerrors(VALIDATION_RULES.IS_MORE_THAN_ONE, weekInterval),
+            this.getvalidationerrors(VALIDATION_RULES.AT_LEAST_ONE_IS_TRUE, daysSelected),
         ]
         // Filter out empty lists
         let actualErrors = errors.filter(list => (list.length > 0))
@@ -209,7 +209,7 @@ class RecurringEvent extends React.Component {
         }
     }
 
-    getValidationErrors (type, value) {
+    getvalidationerrors (type, value) {
         let validations;
         if(value.type && value.type === 'end_date') {
             validations =  [{
@@ -265,7 +265,7 @@ class RecurringEvent extends React.Component {
         }
     }
     render() {
-        const {validationErrors, values} = this.props
+        const {validationerrors, values} = this.props
         const {recurringStartDate, recurringEndDate} = this.state
 
         const VALIDATION_RULES = CONSTANTS.VALIDATION_RULES
@@ -287,14 +287,14 @@ class RecurringEvent extends React.Component {
                             <div className="dates-label">
                                 <FormattedMessage id="repetition-interval-label"/>
                             </div>
-                            
+
                             <div>
                                 <FormattedMessage id="repeated" />
                                 <div className="repetition-count">
                                     <HelTextField
                                         onBlur={() => this.clearErrors()}
                                         onChange={this.weekIntervalChange}
-                                        validationErrors={(this.state.errors.isMoreThanOne ? [VALIDATION_RULES.IS_MORE_THAN_ONE] : null)}
+                                        validationerrors={(this.state.errors.isMoreThanOne ? [VALIDATION_RULES.IS_MORE_THAN_ONE] : null)}
                                         defaultValue={this.state.weekInterval}
                                     />
                                 </div>
@@ -309,8 +309,8 @@ class RecurringEvent extends React.Component {
                                 <div className="play-date-label">
                                     <FormattedMessage id="play-date-label" />
                                 </div>
-                                <ValidationPopover small={true} validationErrors={(this.state.errors.atLeastOneIsTrue ? [VALIDATION_RULES.AT_LEAST_ONE_IS_TRUE] : null)} />
-                                <ValidationPopover small={true} validationErrors={(this.state.errors.daysWithinInterval ? [VALIDATION_RULES.DAY_WITHIN_INTERVAL] : null)} />
+                                <ValidationPopover small={true} validationerrors={(this.state.errors.atLeastOneIsTrue ? [VALIDATION_RULES.AT_LEAST_ONE_IS_TRUE] : null)} />
+                                <ValidationPopover small={true} validationerrors={(this.state.errors.daysWithinInterval ? [VALIDATION_RULES.DAY_WITHIN_INTERVAL] : null)} />
                             </span>
                         </Col>
                     </Row>
@@ -321,7 +321,7 @@ class RecurringEvent extends React.Component {
                     <Row className="recurring-date-range-wrapper multi-field">
                         <RecurringDateRangePicker
                             name="recurringStartDate"
-                            validationErrors={(this.state.errors.isDate ? [VALIDATION_RULES.IS_DATE] : null)}
+                            validationerrors={(this.state.errors.isDate ? [VALIDATION_RULES.IS_DATE] : null)}
                             ref="start_time"
                             defaultValue={startDate}
                             label="repetition-begin"
@@ -331,7 +331,7 @@ class RecurringEvent extends React.Component {
 
                         <RecurringDateRangePicker
                             name="recurringEndDate"
-                            validationErrors={(this.state.errors.afterStartTime ? [VALIDATION_RULES.AFTER_START_TIME] : null)}
+                            validationerrors={(this.state.errors.afterStartTime ? [VALIDATION_RULES.AFTER_START_TIME] : null)}
                             ref="end_time"
                             defaultValue={endDate}
                             label="repetition-end"
@@ -341,12 +341,12 @@ class RecurringEvent extends React.Component {
 
                     <Row>
                         <Col xs={12} sm={6} className="multi-field recurring-times">
-                            <span className="label-wrapper"><FormattedMessage id="repetition-start-time" /><ValidationPopover small={true} validationErrors={(this.state.errors.isTime ? [VALIDATION_RULES.IS_TIME] : null)} /></span>
+                            <span className="label-wrapper"><FormattedMessage id="repetition-start-time" /><ValidationPopover small={true} validationerrors={(this.state.errors.isTime ? [VALIDATION_RULES.IS_TIME] : null)} /></span>
                             <RecurringTimePicker name="recurringStartTime" time={this.state.recurringStartTime} onChange={this.onTimeChange} onBlur={this.onTimeChange} />
                         </Col>
 
                         <Col xs={6} sm={6} className="multi-field recurring-times">
-                            <span className="label-wrapper"><FormattedMessage id="repetition-end-time" /><ValidationPopover small={true} validationErrors={(this.state.errors.isTime ? [VALIDATION_RULES.IS_TIME] : null)} /></span>
+                            <span className="label-wrapper"><FormattedMessage id="repetition-end-time" /><ValidationPopover small={true} validationerrors={(this.state.errors.isTime ? [VALIDATION_RULES.IS_TIME] : null)} /></span>
                             <RecurringTimePicker name="recurringEndTime" time={this.state.recurringEndTime} onChange={this.onTimeChange} onBlur={this.onTimeChange} />
                         </Col>
                     </Row>

@@ -118,8 +118,8 @@ class FormFields extends React.Component {
     }
 
     generateNewEventFields(events) {
-        const {validationErrors} = this.props.editor;
-        const subEventErrors = validationErrors.sub_events || {}
+        const {validationerrors} = this.props.editor;
+        const subEventErrors = validationerrors.sub_events || {}
 
         let newEvents = []
         for (const key in events) {
@@ -171,7 +171,7 @@ class FormFields extends React.Component {
             }
 
         }
-        const {values, validationErrors, contentLanguages} = this.props.editor
+        const {values, validationerrors, contentLanguages} = this.props.editor
         const formType = this.props.action
         const isSuperEvent = values.super_event_type === 'recurring'
 
@@ -190,8 +190,8 @@ class FormFields extends React.Component {
                         </label>
                     </div>
                     <div className="col-xl-8 col-sm-12">
-                        <HelLanguageSelect 
-                            options={API.eventInfoLanguages()} 
+                        <HelLanguageSelect
+                            options={API.eventInfoLanguages()}
                             checked={contentLanguages}
                         />
                     </div>
@@ -203,65 +203,65 @@ class FormFields extends React.Component {
 
                 <div className="row">
                     <div className="col-sm-6">
-                        <MultiLanguageField 
-                            required={true} 
-                            multiLine={false} 
-                            label="event-headline" 
-                            ref="name" name="name" 
-                            validationErrors={validationErrors['name']} 
-                            defaultValue={values['name']} 
-                            languages={this.props.editor.contentLanguages} 
-                            setDirtyState={this.props.setDirtyState} 
-                        />
-                        
-                        <MultiLanguageField 
-                            required={true} multiLine={true} 
-                            label="event-short-description" 
-                            ref="short_description" 
-                            name="short_description" 
-                            validationErrors={validationErrors['short_description']} 
-                            defaultValue={values['short_description']} 
-                            languages={this.props.editor.contentLanguages} 
-                            validations={[VALIDATION_RULES.SHORT_STRING]} 
-                            setDirtyState={this.props.setDirtyState} 
-                            forceApplyToStore 
+                        <MultiLanguageField
+                            required={true}
+                            multiLine={false}
+                            label="event-headline"
+                            ref="name" name="name"
+                            validationerrors={validationerrors['name']}
+                            defaultValue={values['name']}
+                            languages={this.props.editor.contentLanguages}
+                            setDirtyState={this.props.setDirtyState}
                         />
 
-                        <MultiLanguageField 
-                            required={true} 
-                            multiLine={true} 
-                            label="event-description" 
-                            ref="description" 
-                            name="description" 
-                            validationErrors={validationErrors['description']} 
-                            defaultValue={this.trimmedDescription()} 
-                            languages={this.props.editor.contentLanguages} 
-                            validations={[VALIDATION_RULES.LONG_STRING]} 
-                            setDirtyState={this.props.setDirtyState} 
+                        <MultiLanguageField
+                            required={true} multiLine={true}
+                            label="event-short-description"
+                            ref="short_description"
+                            name="short_description"
+                            validationerrors={validationerrors['short_description']}
+                            defaultValue={values['short_description']}
+                            languages={this.props.editor.contentLanguages}
+                            validations={[VALIDATION_RULES.SHORT_STRING]}
+                            setDirtyState={this.props.setDirtyState}
+                            forceApplyToStore
                         />
-                        <MultiLanguageField 
-                            required={false} 
-                            multiLine={false} 
-                            label="event-info-url" 
-                            ref="info_url" 
-                            name="info_url" 
-                            validationErrors={validationErrors['info_url']} 
-                            defaultValue={values['info_url']} 
-                            languages={this.props.editor.contentLanguages} 
-                            validations={[VALIDATION_RULES.IS_URL]} 
-                            setDirtyState={this.props.setDirtyState} 
-                            forceApplyToStore 
+
+                        <MultiLanguageField
+                            required={true}
+                            multiLine={true}
+                            label="event-description"
+                            ref="description"
+                            name="description"
+                            validationerrors={validationerrors['description']}
+                            defaultValue={this.trimmedDescription()}
+                            languages={this.props.editor.contentLanguages}
+                            validations={[VALIDATION_RULES.LONG_STRING]}
+                            setDirtyState={this.props.setDirtyState}
                         />
-                        <MultiLanguageField 
-                            required={false} 
-                            multiLine={false} 
-                            label="event-provider-input" 
-                            ref="provider" 
-                            name="provider" 
-                            validationErrors={validationErrors['provider']} 
-                            defaultValue={values['provider']} 
-                            languages={this.props.editor.contentLanguages} 
-                            setDirtyState={this.props.setDirtyState} 
+                        <MultiLanguageField
+                            required={false}
+                            multiLine={false}
+                            label="event-info-url"
+                            ref="info_url"
+                            name="info_url"
+                            validationerrors={validationerrors['info_url']}
+                            defaultValue={values['info_url']}
+                            languages={this.props.editor.contentLanguages}
+                            validations={[VALIDATION_RULES.IS_URL]}
+                            setDirtyState={this.props.setDirtyState}
+                            forceApplyToStore
+                        />
+                        <MultiLanguageField
+                            required={false}
+                            multiLine={false}
+                            label="event-provider-input"
+                            ref="provider"
+                            name="provider"
+                            validationerrors={validationerrors['provider']}
+                            defaultValue={values['provider']}
+                            languages={this.props.editor.contentLanguages}
+                            setDirtyState={this.props.setDirtyState}
                         />
                         <OrganizationSelector
                             formType={formType}
@@ -286,7 +286,7 @@ class FormFields extends React.Component {
                                 <HelDateTimeField
                                     datePickerProps={{disabled: formType === 'update' && isSuperEvent}}
                                     timePickerProps={{disabled: formType === 'update' && isSuperEvent}}
-                                    validationErrors={validationErrors['start_time']}
+                                    validationerrors={validationerrors['start_time']}
                                     defaultValue={values['start_time']}
                                     ref="start_time"
                                     name="start_time"
@@ -298,7 +298,7 @@ class FormFields extends React.Component {
                                 <HelDateTimeField
                                     datePickerProps={{disabled: formType === 'update' && isSuperEvent}}
                                     timePickerProps={{disabled: formType === 'update' && isSuperEvent}}
-                                    validationErrors={validationErrors['end_time']}
+                                    validationerrors={validationerrors['end_time']}
                                     defaultValue={values['end_time']}
                                     ref="end_time" name="end_time"
                                     label="event-ending-datetime"
@@ -310,7 +310,7 @@ class FormFields extends React.Component {
                             { newEvents }
                         </div>
                         { this.state.showRecurringEvent &&
-                            <RecurringEvent toggle={() => this.showRecurringEventDialog()} validationErrors={validationErrors} values={values}/>
+                            <RecurringEvent toggle={() => this.showRecurringEventDialog()} validationerrors={validationerrors} values={values}/>
                         }
                         <Button
                             raised
@@ -348,7 +348,7 @@ class FormFields extends React.Component {
                             dataSource={`${appSettings.api_base}/place/?show_all_places=1&text=`}
                             resource="place"
                             required={true}
-                            validationErrors={validationErrors['location']}
+                            validationerrors={validationerrors['location']}
                             defaultValue={values['location']}
                             label={this.context.intl.formatMessage({id: 'event-location'})}
                             placeholder={this.context.intl.formatMessage({id: 'event-location'})}
@@ -359,15 +359,15 @@ class FormFields extends React.Component {
                                 <i className="material-icons">&#xE14D;</i>
                             </button>
                         </CopyToClipboard>
-                        <MultiLanguageField 
-                            multiLine={true} 
-                            label="event-location-additional-info" 
-                            ref="location_extra_info" 
-                            name="location_extra_info" 
-                            validationErrors={validationErrors['location_extra_info']}
-                            validations={[VALIDATION_RULES.SHORT_STRING]} 
-                            defaultValue={values['location_extra_info']} 
-                            languages={this.props.editor.contentLanguages} 
+                        <MultiLanguageField
+                            multiLine={true}
+                            label="event-location-additional-info"
+                            ref="location_extra_info"
+                            name="location_extra_info"
+                            validationerrors={validationerrors['location_extra_info']}
+                            validations={[VALIDATION_RULES.SHORT_STRING]}
+                            defaultValue={values['location_extra_info']}
+                            languages={this.props.editor.contentLanguages}
                             setDirtyState={this.props.setDirtyState}
                         />
                     </div>
@@ -388,7 +388,7 @@ class FormFields extends React.Component {
                         <HelOffersField
                             ref="offers"
                             name="offers"
-                            validationErrors={validationErrors}
+                            validationerrors={validationerrors}
                             defaultValue={values['offers']}
                             languages={this.props.editor.contentLanguages}
                             setDirtyState={this.props.setDirtyState}
@@ -412,7 +412,7 @@ class FormFields extends React.Component {
                             ref="extlink_facebook"
                             name="extlink_facebook"
                             label={<FormattedMessage id="facebook-url"/>}
-                            validationErrors={validationErrors['extlink_facebook']}
+                            validationerrors={validationerrors['extlink_facebook']}
                             defaultValue={values['extlink_facebook']}
                             setDirtyState={this.props.setDirtyState}
                             forceApplyToStore
@@ -422,7 +422,7 @@ class FormFields extends React.Component {
                             ref="extlink_twitter"
                             name="extlink_twitter"
                             label={<FormattedMessage id="twitter-url"/>}
-                            validationErrors={validationErrors['extlink_twitter']}
+                            validationerrors={validationerrors['extlink_twitter']}
                             defaultValue={values['extlink_twitter']}
                             setDirtyState={this.props.setDirtyState}
                             forceApplyToStore
@@ -432,7 +432,7 @@ class FormFields extends React.Component {
                             ref="extlink_instagram"
                             name="extlink_instagram"
                             label={<FormattedMessage id="instagram-url"/>}
-                            validationErrors={validationErrors['extlink_instagram']}
+                            validationerrors={validationerrors['extlink_instagram']}
                             defaultValue={values['extlink_instagram']}
                             setDirtyState={this.props.setDirtyState}
                             forceApplyToStore
@@ -452,7 +452,7 @@ class FormFields extends React.Component {
                         name="keywords"
                         resource="keyword"
                         dataSource={`${appSettings.api_base}/keyword/?show_all_keywords=1&data_source=yso&text=`}
-                        validationErrors={validationErrors['keywords']}
+                        validationerrors={validationerrors['keywords']}
                         setDirtyState={this.props.setDirtyState}
                     />
                     <CopyToClipboard text={values['keywords'] ? this.getKeywords(values['keywords']) : ''}>
@@ -466,7 +466,7 @@ class FormFields extends React.Component {
                         selectedValues={values['hel_main']}
                         ref="hel_main"
                         name="hel_main"
-                        validationErrors={validationErrors['hel_main']}
+                        validationerrors={validationerrors['hel_main']}
                         itemClassName="col-md-12 col-lg-6"
                         options={helMainOptions}
                         setDirtyState={this.props.setDirtyState}
@@ -479,7 +479,7 @@ class FormFields extends React.Component {
                         selectedValues={values['audience']}
                         ref="audience"
                         name="audience"
-                        validationErrors={validationErrors['audience']}
+                        validationerrors={validationerrors['audience']}
                         itemClassName="col-md-12 col-lg-6"
                         options={helTargetOptions}
                         setDirtyState={this.props.setDirtyState}
@@ -490,7 +490,7 @@ class FormFields extends React.Component {
                         selectedValues={values['in_language']}
                         ref="in_language"
                         name="in_language"
-                        validationErrors={validationErrors['in_language']}
+                        validationerrors={validationerrors['in_language']}
                         itemClassName="col-md-12 col-lg-6"
                         options={helEventLangOptions}
                         setDirtyState={this.props.setDirtyState}
@@ -509,7 +509,7 @@ class FormFields extends React.Component {
                                     ref="audience_min_age"
                                     name="audience_min_age"
                                     label={<FormattedMessage id="audience-min-age"/>}
-                                    validationErrors={validationErrors['audience_min_age']}
+                                    validationerrors={validationerrors['audience_min_age']}
                                     defaultValue={values['audience_min_age']}
                                     setDirtyState={this.props.setDirtyState}
                                 />
@@ -518,7 +518,7 @@ class FormFields extends React.Component {
                                     ref="audience_max_age"
                                     name="audience_max_age"
                                     label={<FormattedMessage id="audience-max-age"/>}
-                                    validationErrors={validationErrors['audience_max_age']}
+                                    validationerrors={validationerrors['audience_max_age']}
                                     defaultValue={values['audience_max_age']}
                                     setDirtyState={this.props.setDirtyState}
                                 />
@@ -531,7 +531,7 @@ class FormFields extends React.Component {
                         <div className="row">
                             <div className="col-sm-6 col-md-4">
                                 <HelDateTimeField
-                                    validationErrors={validationErrors['enrolment_start_time']}
+                                    validationerrors={validationerrors['enrolment_start_time']}
                                     defaultValue={values['enrolment_start_time']}
                                     ref="enrolment_start_time"
                                     name="enrolment_start_time"
@@ -541,7 +541,7 @@ class FormFields extends React.Component {
                             </div>
                             <div className="col-sm-6 col-md-4">
                                 <HelDateTimeField
-                                    validationErrors={validationErrors['enrolment_end_time']}
+                                    validationerrors={validationerrors['enrolment_end_time']}
                                     defaultValue={values['enrolment_end_time']}
                                     ref="enrolment_end_time"
                                     name="enrolment_end_time"
@@ -560,7 +560,7 @@ class FormFields extends React.Component {
                                     ref="minimum_attendee_capacity"
                                     name="minimum_attendee_capacity"
                                     label={<FormattedMessage id="minimum-attendee-capacity"/>}
-                                    validationErrors={validationErrors['minimum_attendee_capacity']}
+                                    validationerrors={validationerrors['minimum_attendee_capacity']}
                                     defaultValue={values['minimum_attendee_capacity']}
                                     setDirtyState={this.props.setDirtyState}
                                 />
@@ -569,7 +569,7 @@ class FormFields extends React.Component {
                                     ref="maximum_attendee_capacity"
                                     name="maximum_attendee_capacity"
                                     label={<FormattedMessage id="maximum-attendee-capacity"/>}
-                                    validationErrors={validationErrors['maximum_attendee_capacity']}
+                                    validationerrors={validationerrors['maximum_attendee_capacity']}
                                     defaultValue={values['maximum_attendee_capacity']}
                                     setDirtyState={this.props.setDirtyState}
                                 />

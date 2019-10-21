@@ -14,7 +14,7 @@ class HelCheckbox extends React.Component {
 
         this.handleCheck = this.handleCheck.bind(this)
     }
-    
+
     handleCheck (event) {
         let newValue = event.target.checked
 
@@ -29,11 +29,11 @@ class HelCheckbox extends React.Component {
         }
     }
 
-    getValidationErrors() {
+    getvalidationerrors() {
         return []
     }
 
-    noValidationErrors() {
+    novalidationerrors() {
         return true
     }
 

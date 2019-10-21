@@ -17,7 +17,7 @@ class NewOffer extends React.Component {
     };
 
     static propTypes = {
-        validationErrors: PropTypes.oneOfType([
+        validationerrors: PropTypes.oneOfType([
             PropTypes.array,
             PropTypes.object,
         ]),
@@ -31,7 +31,7 @@ class NewOffer extends React.Component {
 
     onBlur(e) {
         if(this.props.offerKey) {
-        //            if(this.noValidationErrors()) {
+        //            if(this.novalidationerrors()) {
             let obj = {}
             obj[this.props.offerKey] = this.buildObject()
             this.context.dispatch(setOfferData(obj, this.props.offerKey))
@@ -63,9 +63,9 @@ class NewOffer extends React.Component {
         return obj
     }
 
-    noValidationErrors() {
+    novalidationerrors() {
         let noErrors = _.map(this.refs, (ref, key) =>
-            (ref.noValidationErrors())
+            (ref.novalidationerrors())
         )
         let actualErrors = _.filter(noErrors, i => (i === false))
 
@@ -91,39 +91,39 @@ class NewOffer extends React.Component {
         }
         return (
             <div key={offerKey} className="offer-fields" style={{'position': 'relative'}}>
-                <label style={{position: 'relative'}}><ValidationPopover validationErrors={this.props.validationErrors} /></label>
-                <MultiLanguageField 
-                    defaultValue={defaultValue.price} 
-                    disabled={isFree} 
-                    ref="price" 
-                    label="event-price" 
-                    languages={languages} 
-                    onBlur={e => this.onBlur(e)} 
-                    validationErrors={this.props.validationErrors['price']} 
-                    index={this.props.offerKey} 
-                    required={true} 
+                <label style={{position: 'relative'}}><ValidationPopover validationerrors={this.props.validationerrors} /></label>
+                <MultiLanguageField
+                    defaultValue={defaultValue.price}
+                    disabled={isFree}
+                    ref="price"
+                    label="event-price"
+                    languages={languages}
+                    onBlur={e => this.onBlur(e)}
+                    validationerrors={this.props.validationerrors['price']}
+                    index={this.props.offerKey}
+                    required={true}
                 />
 
-                <MultiLanguageField 
-                    defaultValue={defaultValue.info_url} 
-                    ref="info_url" 
-                    label="event-purchase-link" 
-                    languages={languages} 
-                    onBlur={e => this.onBlur(e)} validations={[VALIDATION_RULES.IS_URL]} 
-                    validationErrors={this.props.validationErrors['info_url']} 
+                <MultiLanguageField
+                    defaultValue={defaultValue.info_url}
+                    ref="info_url"
+                    label="event-purchase-link"
+                    languages={languages}
+                    onBlur={e => this.onBlur(e)} validations={[VALIDATION_RULES.IS_URL]}
+                    validationerrors={this.props.validationerrors['info_url']}
                     index={this.props.offerKey}
                 />
 
-                <MultiLanguageField 
-                    defaultValue={defaultValue.description} 
-                    disabled={isFree} 
-                    ref="description" 
-                    label="event-price-info" 
-                    languages={languages} 
-                    multiLine={true} 
-                    onBlur={e => this.onBlur(e)} 
-                    validationErrors={this.props.validationErrors['offer_description']} 
-                    index={this.props.offerKey} 
+                <MultiLanguageField
+                    defaultValue={defaultValue.description}
+                    disabled={isFree}
+                    ref="description"
+                    label="event-price-info"
+                    languages={languages}
+                    multiLine={true}
+                    onBlur={e => this.onBlur(e)}
+                    validationerrors={this.props.validationerrors['offer_description']}
+                    index={this.props.offerKey}
                 />
 
                 <Button

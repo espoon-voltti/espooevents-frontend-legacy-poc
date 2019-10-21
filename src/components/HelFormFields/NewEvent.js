@@ -36,7 +36,7 @@ class NewEvent extends React.Component {
                                 label="event-starting-datetime"
                                 defaultValue={this.props.event.start_time}
                                 eventKey={eventKey}
-                                validationErrors={errors['start_time']}
+                                validationerrors={errors['start_time']}
                             />
                         </div>
                         <div className="col-xs-12 col-md-6">
@@ -46,7 +46,7 @@ class NewEvent extends React.Component {
                                 label="event-ending-datetime"
                                 defaultValue={this.props.event.end_time}
                                 eventKey={eventKey}
-                                validationErrors={errors['end_time']}
+                                validationerrors={errors['end_time']}
                             />
                         </div>
                         <Button

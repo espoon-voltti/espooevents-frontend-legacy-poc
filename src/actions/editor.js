@@ -100,14 +100,14 @@ export function replaceData(formData) {
             formObject.publication_status || constants.PUBLICATION_STATUS.PUBLIC
 
         // run the validation before copy to a draft
-        const validationErrors = doValidations(
+        const validationerrors = doValidations(
             formObject,
             contentLanguages,
             publicationStatus
         )
 
         // empty id, event_status, and any field that has validation errors
-        keys(validationErrors).map(field => {
+        keys(validationerrors).map(field => {
             formObject = emptyField(formObject, field)
         })
         delete formObject.id
@@ -115,7 +115,7 @@ export function replaceData(formData) {
         delete formObject.super_event_type
 
         dispatch(validateFor(publicationStatus))
-        dispatch(setValidationErrors({}))
+        dispatch(setvalidationerrors({}))
         dispatch({
             type: constants.EDITOR_REPLACEDATA,
             values: formObject,
@@ -136,7 +136,7 @@ export function clearData() {
  * Set validation errors for editor (shown with validation popovers)
  * @param {obj} errors
  */
-export function setValidationErrors(errors) {
+export function setvalidationerrors(errors) {
     return dispatch => {
         dispatch({
             type: constants.SET_VALIDATION_ERRORS,
@@ -201,15 +201,15 @@ const prepareFormValues = (
         recurring = keys(formValues.sub_events).length > 0
     }
     // Run validations
-    let validationErrors = doValidations(
+    let validationerrors = doValidations(
         formValues,
         contentLanguages,
         publicationStatus
     )
 
     // There are validation errors, don't continue sending
-    if (keys(validationErrors).length > 0) {
-        return dispatch(setValidationErrors(validationErrors))
+    if (keys(validationerrors).length > 0) {
+        return dispatch(setvalidationerrors(validationerrors))
     }
 
     const multiLanguageValues = {}

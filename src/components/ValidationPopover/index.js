@@ -7,27 +7,27 @@ import {FormattedMessage} from 'react-intl'
 
 import {getCharacterLimitByRule} from '../../utils/helpers'
 
-const ValidationPopover =  ({validationErrors, index, small, ...rest}) => {
+const ValidationPopover =  ({validationerrors, index, small, ...rest}) => {
     let errorMsg = null
 
-    if(validationErrors && validationErrors[0]) {
+    if(validationerrors && validationerrors[0]) {
         let errorText = null
-        let textLimit = null 
-        if (typeof validationErrors[0] === 'object') {
-            for (const object in validationErrors[0]) {
-                if (validationErrors[0][object].key === index) {
-                    errorText = `validation-${validationErrors[0][object].validation}`
+        let textLimit = null
+        if (typeof validationerrors[0] === 'object') {
+            for (const object in validationerrors[0]) {
+                if (validationerrors[0][object].key === index) {
+                    errorText = `validation-${validationerrors[0][object].validation}`
 
                     // check if validation is text limiter
-                    textLimit = getCharacterLimitByRule(validationErrors[0][object].validation)
+                    textLimit = getCharacterLimitByRule(validationerrors[0][object].validation)
                     if(textLimit) {
                         errorText = `validation-stringLimitReached`
                     }
                 }
             }
         } else {
-            errorText = `validation-${validationErrors[0]}`
-            textLimit = getCharacterLimitByRule(validationErrors[0])
+            errorText = `validation-${validationerrors[0]}`
+            textLimit = getCharacterLimitByRule(validationerrors[0])
             if(textLimit) {
                 errorText = `validation-stringLimitReached`
             }
@@ -53,7 +53,7 @@ const ValidationPopover =  ({validationErrors, index, small, ...rest}) => {
 }
 
 ValidationPopover.propTypes = {
-    validationErrors: PropTypes.oneOfType([
+    validationerrors: PropTypes.oneOfType([
         PropTypes.array,
         PropTypes.object,
     ]),

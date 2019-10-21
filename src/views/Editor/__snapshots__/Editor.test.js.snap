@@ -26,7 +26,7 @@ exports[`Editor Snapshot should render view correctly when creating new event fr
           id="clear-form"
           values={Object {}}
         />
-         
+
         <pure(Close) />
       </WithStyles(Button)>
     </span>
@@ -764,7 +764,7 @@ exports[`Editor Snapshot should render view correctly when creating new event fr
             },
           ],
           "validateFor": null,
-          "validationErrors": Object {},
+          "validationerrors": Object {},
           "validationStatus": "resolve",
           "values": Object {
             "audience": Array [
@@ -1000,7 +1000,7 @@ exports[`Editor Snapshot should render view correctly when editing existing even
           id="clear-form"
           values={Object {}}
         />
-         
+
         <pure(Close) />
       </WithStyles(Button)>
     </span>
@@ -1738,7 +1738,7 @@ exports[`Editor Snapshot should render view correctly when editing existing even
             },
           ],
           "validateFor": null,
-          "validationErrors": Object {},
+          "validationerrors": Object {},
           "validationStatus": "resolve",
           "values": Object {
             "audience": Array [
@@ -1997,7 +1997,7 @@ exports[`Editor Snapshot should render view correctly when new event 1`] = `
           id="clear-form"
           values={Object {}}
         />
-         
+
         <pure(Close) />
       </WithStyles(Button)>
     </span>
@@ -2644,7 +2644,7 @@ exports[`Editor Snapshot should render view correctly when new event 1`] = `
             },
           ],
           "validateFor": null,
-          "validationErrors": Object {},
+          "validationerrors": Object {},
           "values": Object {
             "sub_events": Object {},
           },

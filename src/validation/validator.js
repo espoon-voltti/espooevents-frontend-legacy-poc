@@ -135,11 +135,11 @@ function runValidationWithSettings(values, languages, settings) {
 
         obj[key] = errors
     })
-    obj = pickBy(obj, (validationErrors, key) => {
+    obj = pickBy(obj, (validationerrors, key) => {
         if (key === 'sub_events') {
-            return !isEmpty(validationErrors)
+            return !isEmpty(validationerrors)
         }
-        return validationErrors.length > 0
+        return validationerrors.length > 0
     })
     return obj
 }

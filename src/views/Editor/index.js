@@ -21,7 +21,7 @@ import {
     cancelEvent as cancelEventAction,
     sendData as sendDataAction,
     clearData as clearDataAction,
-    setValidationErrors as setValidationErrorsAction,
+    setvalidationerrors as setvalidationerrorsAction,
 } from '../../actions/editor'
 import {confirmAction, clearFlashMsg} from '../../actions/app'
 import {fetchSubEvents as fetchSubEventsAction} from '../../actions/subEvents'
@@ -41,7 +41,7 @@ import {mapAPIDataToUIFormat, mapUIDataToAPIFormat} from '../../utils/formDataMa
 export class EditorPage extends React.Component {
     constructor(props) {
         super(props)
-        
+
         this.handler = (ev) => {
             ev.preventDefault();
             if (this.state.isDirty) {
@@ -87,7 +87,7 @@ export class EditorPage extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.handler)
-        this.props.setValidationErrors({})
+        this.props.setvalidationerrors({})
     }
 
     setDirtyState() {
@@ -338,8 +338,8 @@ const mapDispatchToProps = (dispatch) => ({
     fetchEventForEditing: (eventId, user) => dispatch(fetchEventForEditingAction(eventId, user)),
     fetchSubEvents: (eventId, user) => dispatch(fetchSubEventsAction(eventId, user)),
     clearData: () => dispatch(clearDataAction()),
-    setValidationErrors: (errors) => dispatch(setValidationErrorsAction(errors)),
-    sendData: (updateExisting, publicationStatus) => 
+    setvalidationerrors: (errors) => dispatch(setvalidationerrorsAction(errors)),
+    sendData: (updateExisting, publicationStatus) =>
         dispatch(sendDataAction(updateExisting, publicationStatus)),
     confirm: (msg, style, actionButtonLabel, data) => dispatch(confirmAction(msg, style, actionButtonLabel, data)),
     deleteEvent: (eventId, user, values) => dispatch(deleteEventAction(eventId, user, values)),
@@ -350,7 +350,7 @@ EditorPage.propTypes = {
     match: PropTypes.object,
     fetchEventForEditing: PropTypes.func,
     fetchSubEvents: PropTypes.func,
-    setValidationErrors: PropTypes.func,
+    setvalidationerrors: PropTypes.func,
     clearData: PropTypes.func,
     user: PropTypes.object,
     editor: PropTypes.object,
