@@ -58,7 +58,6 @@ export class Login extends Component {
                     this.setState({showWarning: false})
                     localStorage.setItem('apikey', res.apikey)
                     this.dispatchLogin()
-                    // window.location.reload()
                 }
             })
     }
@@ -140,9 +139,6 @@ export class Login extends Component {
     }
 }
 
-Login.propTypes = {}
-
-// Adds dispatch to this.props for calling actions, add user from store to props
 Login.propTypes = {}
 
 const mapStateToProps = state => ({})

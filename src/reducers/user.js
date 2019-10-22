@@ -1,8 +1,4 @@
 import constants from '../constants'
-import {mockUser} from '../../__mocks__/mockData'
-
-// Saved in store.user
-// const initialState = null
 
 // Returns userdata if available, else return null
 function tryFetchingUserFromLocalStorage() {
@@ -43,7 +39,6 @@ function update(state = initialState, action) {
         case constants.RECEIVE_USERDATA:
             console.log('User data', action.payload)
             if (action.payload && action.payload.id) {
-                // TODO: get from payload
                 return Object.assign({}, action.payload)
             } else {
                 return state
