@@ -6,11 +6,9 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {withRouter} from 'react-router'
-import {App} from 'src/views/app'
 
 import {login, logout, loggedInUser} from 'src/actions/user.js'
 import {setLocale as setLocaleAction} from 'src/actions/userLocale'
-import {showLogin} from 'src/actions/app'
 import {makeLoginVisible} from 'src/actions/app'
 
 import {FormattedMessage} from 'react-intl'
@@ -26,12 +24,9 @@ import {
     Drawer,
 } from 'material-ui'
 // Material-ui Icons
-import List from 'material-ui-icons/List'
-import Search from 'material-ui-icons/Search'
 import Add from 'material-ui-icons/Add'
 import MenuIcon from 'material-ui-icons/Menu'
 import Language from 'material-ui-icons/Language'
-import HelpOutline from 'material-ui-icons/HelpOutline'
 import Person from 'material-ui-icons/Person'
 
 import {Link} from 'react-router-dom'
@@ -197,10 +192,6 @@ const NavLinks = props => {
     )
 }
 
-// App.propTypes = {
-//     dispatch: PropTypes.func,
-// }
-
 NavLinks.propTypes = {
     toMainPage: PropTypes.func,
     toSearchPage: PropTypes.func,
@@ -216,13 +207,11 @@ HeaderBar.propTypes = {
     userLocale: PropTypes.object,
     setLocale: PropTypes.func,
     location: PropTypes.object,
-    // makeLoginVisible: PropTypes.func,
 }
 
 const mapStateToProps = state => ({
     user: state.user,
     userLocale: state.userLocale,
-    // app: state.app,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -230,7 +219,6 @@ const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(logout()),
     routerPush: url => dispatch(push(url)),
     setLocale: locale => dispatch(setLocaleAction(locale)),
-    // makeLoginVisible: () => dispatch(makeLoginVisible()),
 })
 
 export default withRouter(
