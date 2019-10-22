@@ -19,9 +19,7 @@ export function clearUserData() {
 
 // Adds an expiration time for user and saves it to localStorage.
 function saveUserToLocalStorage(user) {
-    console.log('save')
     let modifiedUser = Object.assign({}, user)
-
     let expiryDate = new Date()
     let expiryTime = appSettings.local_storage_user_expiry_time || 12
     expiryDate.setHours(expiryDate.getHours() + expiryTime)
@@ -39,7 +37,6 @@ export function retrieveUserFromSession() {
                 return response.json()
             })
             .then(user => {
-                console.log('retrieve')
                 if (user.token) {
                     const settings = {
                         headers: {
