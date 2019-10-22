@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import {withRouter} from 'react-router'
 import {connect} from 'react-redux'
 
-import {login} from '../../actions/app'
+import {makeLoginInvisible, login} from '../../actions/app'
 
 export class Login extends Component {
     constructor(props) {
@@ -21,6 +21,10 @@ export class Login extends Component {
     }
 
     dispatchLoginHide = () => {
+        this.context.dispatch(makeLoginInvisible())
+    }
+
+    dispatchLogin = () => {
         this.context.dispatch(login())
     }
 
@@ -53,7 +57,7 @@ export class Login extends Component {
                 if (res.apikey) {
                     this.setState({showWarning: false})
                     localStorage.setItem('apikey', res.apikey)
-                    this.dispatchLoginHide()
+                    this.dispatchLogin()
                     // window.location.reload()
                 }
             })

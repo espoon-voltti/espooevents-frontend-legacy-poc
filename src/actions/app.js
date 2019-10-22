@@ -75,14 +75,20 @@ export function makeLoginVisible() {
     }
 }
 
+export function makeLoginInvisible() {
+    return dispatch => {
+        dispatch({type: constants.HIDE_LOGIN})
+    }
+}
+
 export function login() {
     return dispatch => {
         // dispatch(showLogin())
-        dispatch({type: constants.HIDE_LOGIN})
         dispatch({
             type: constants.RECEIVE_USERDATA,
             payload: mockUser,
         })
+        dispatch({type: constants.HIDE_LOGIN})
     }
 }
 
