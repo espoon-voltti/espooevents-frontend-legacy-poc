@@ -82,38 +82,7 @@ export function retrieveUserFromSession() {
 
 export function login() {
     return dispatch => {
-        return new Promise(resolve => {
-            const user = window.prompt('Käyttäjätunnus: ')
-            const password = window.prompt('Salasana: ')
-            console.log(user, password)
-            const credentials = user + ':' + password
-            const encodedCredentials = window.btoa(credentials)
-            fetch('/auth/login/helsinki', {
-                // method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
-                headers: {
-                    Authorization: 'Basic ' + encodedCredentials,
-                },
-                redirect: 'follow', // manual, *follow, error
-                referrer: 'no-referrer', // no-referrer, *client
-            })
-                .then(res => {
-                    if (res.status === 200) {
-                        return res.json()
-                    } else {
-                        window.alert('Väärä käyttäjätunnus tai salasana!')
-                    }
-                })
-                .then(res => {
-                    if (res.apikey) {
-                        localStorage.setItem('apikey', res.apikey)
-                        window.alert('Tervetuloa admin!')
-                        window.location.reload()
-                    }
-                })
-        }).then(() => {
+        return new Promise(resolve => {}).then(() => {
             return dispatch(retrieveUserFromSession())
         })
     }
@@ -121,9 +90,12 @@ export function login() {
 
 export function logout() {
     localStorage.removeItem('apikey')
-    window.location.reload()
+    return dispatch => {
+        dispatch(clearUserData())
+    }
 }
 
 export function loggedInUser() {
     return localStorage.getItem('apikey') ? true : false
 }
+

@@ -1,52 +1,109 @@
-@import "fonts";
-@import "button";
+@import 'fonts';
+@import 'button';
 
 // Box shadow shim for bootstrap
-@mixin box-shadow($left:0, $top:2px, $blur:2px, $color:#000, $inset:"") {
-      -webkit-box-shadow:$left $top $blur $color #{$inset};
-      -moz-box-shadow:$left $top $blur $color #{$inset};
-      box-shadow:$left $top $blur $color #{$inset};
+@mixin box-shadow($left: 0, $top: 2px, $blur: 2px, $color: #000, $inset: '') {
+    -webkit-box-shadow: $left $top $blur $color #{$inset};
+    -moz-box-shadow: $left $top $blur $color #{$inset};
+    box-shadow: $left $top $blur $color #{$inset};
 }
 
-@import "node_modules/bootstrap/scss/bootstrap.scss";
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
 
-// @import "node_modules/bootstrap/scss/mixins/_label.scss";
-// @import "node_modules/bootstrap/scss/_labels.scss";
+// Login window
 
-// Define a custom sass file to override any variables defined in scaffolding.scss
-// @import "my-custom-overrides.scss";
+#login-window {
+    box-shadow: 0px 0px 15px #6f6f6f;
+    width: 500px;
+    height: 400px;
+    position: fixed;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, 0);
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+#login-window input {
+    width: 250px;
+    height: 40px;
+    margin: 5px 0px;
+    border-radius: 20px;
+}
+
+#login-send {
+    background: rgb(108, 178, 230);
+    background: linear-gradient(
+        90deg,
+        rgba(108, 178, 230, 1) 0%,
+        rgba(64, 161, 233, 1) 35%,
+        rgba(0, 114, 198, 1) 100%
+    );
+    color: #fff;
+    margin-top: 15px !important;
+}
+
+#login-window :focus {
+    outline: 0;
+}
+
+.login-warning {
+    text-align: center;
+}
+
+.login-block {
+    width: 100%;
+}
+
+.login-block input {
+    padding: 0px 20px;
+}
+
+.login-welcome {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+// Rest of the styles
 
 .well {
-    min-height:20px;
-    padding:19px;
+    min-height: 20px;
+    padding: 19px;
     margin: 2em;
-    margin-bottom:20px;
-    background-color:#f5f5f5;
-    border:1px solid #e3e3e3;
-    border-radius:4px;
-    box-shadow:inset 0 1px 1px rgba(0,0,0,.05)
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .well blockquote {
-    border-color:#ddd;
-    border-color:rgba(0,0,0,.15)
+    border-color: #ddd;
+    border-color: rgba(0, 0, 0, 0.15);
 }
 .well-lg {
-    padding:24px;
-    border-radius:6px
+    padding: 24px;
+    border-radius: 6px;
 }
 .well-sm {
-    padding:9px;
-    border-radius:3px
+    padding: 9px;
+    border-radius: 3px;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     padding: 0;
     margin: 0;
 
     background-color: #f7f7f7;
 
-    font: normal normal normal 18px/1.2 "HelsinkiGrotesk", "Helvetica Neue", "Segoe UI", Calibri, sans-serif;
+    font: normal normal normal 18px/1.2 'HelsinkiGrotesk', 'Helvetica Neue',
+        'Segoe UI', Calibri, sans-serif;
 }
 
 .material-icons {
@@ -60,8 +117,11 @@ html, body {
     padding-bottom: 2em;
 }
 
-h1,h2,h3 {
-    font-family: "HelsinkiGrotesk", "Roboto", "Helvetica Neue", "Segoe UI", Calibri, sans-serif;
+h1,
+h2,
+h3 {
+    font-family: 'HelsinkiGrotesk', 'Roboto', 'Helvetica Neue', 'Segoe UI',
+        Calibri, sans-serif;
 }
 
 h1 {
@@ -69,7 +129,10 @@ h1 {
     font-size: 51px;
 }
 
-h2,h3,legend,.legend {
+h2,
+h3,
+legend,
+.legend {
     font-size: 31px;
     color: #757575;
 }
@@ -80,8 +143,8 @@ h2,h3,legend,.legend {
     margin-bottom: 0.5rem;
 }
 
-
-h1,h2 {
+h1,
+h2 {
     padding-top: 110px;
     padding-bottom: 40px;
 
@@ -117,7 +180,7 @@ header {
 .notification-bar {
     button {
         color: white !important;
-        background-color: rgba(0,0,0,0.16) !important;
+        background-color: rgba(0, 0, 0, 0.16) !important;
     }
 }
 
@@ -166,7 +229,6 @@ header {
     left: 0;
 }
 
-
 #testingmessage {
     background: red;
     text-align: center;
@@ -203,4 +265,3 @@ header {
         bottom: 1em;
     }
 }
-

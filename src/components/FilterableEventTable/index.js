@@ -1,13 +1,11 @@
 import './index.scss'
 
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import React from 'react'
 import {connect} from 'react-redux'
 import {CircularProgress} from 'material-ui'
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage} from 'react-intl'
 
-import SearchBar from '../SearchBar'
-import {fetchEvents} from '../../actions/events'
 import {setUserEventsSortOrder, fetchUserEvents} from '../../actions/userEvents'
 import EventTable from './EventTable'
 
@@ -15,7 +13,7 @@ class FilterableEventTable extends React.Component {
     static contextTypes = {
         intl: PropTypes.object,
         dispatch: PropTypes.func,
-    };
+    }
 
     constructor(props) {
         super(props)
@@ -26,8 +24,11 @@ class FilterableEventTable extends React.Component {
 
     render() {
         let results = null
-        const {getNextPage} = this.props;
-        if (this.props.events.length > 0 || this.props.fetchComplete === false) {
+        const {getNextPage} = this.props
+        if (
+            this.props.events.length > 0 ||
+            this.props.fetchComplete === false
+        ) {
             const progressStyle = {
                 marginTop: '20px',
                 marginLeft: '60px',
@@ -35,25 +36,27 @@ class FilterableEventTable extends React.Component {
 
             results = (
                 <div>
-                    <EventTable 
-                        events={this.props.events} 
-                        getNextPage={getNextPage} 
-                        filterText={''} 
-                        sortBy={this.props.sortBy} 
-                        sortOrder={this.props.sortOrder} 
-                        user={this.props.user} 
-                        count={this.props.count} 
+                    <EventTable
+                        events={this.props.events}
+                        getNextPage={getNextPage}
+                        filterText={''}
+                        sortBy={this.props.sortBy}
+                        sortOrder={this.props.sortOrder}
+                        user={this.props.user}
+                        count={this.props.count}
                         changeSortOrder={this.props.changeSortOrder}
                         changePaginationPage={this.props.changePaginationPage}
                         paginationPage={this.props.paginationPage}
                     />
-                    {this.props.fetchComplete === false &&
-                        <span><CircularProgress style={progressStyle}/></span>
-                    }
+                    {this.props.fetchComplete === false && (
+                        <span>
+                            <CircularProgress style={progressStyle} />
+                        </span>
+                    )}
                 </div>
             )
         } else {
-            results = <FormattedMessage id="organization-events-no-results"/>
+            results = <div>Ei tapahtumia</div>
         }
 
         let err = ''
@@ -64,19 +67,18 @@ class FilterableEventTable extends React.Component {
         if (this.props.apiErrorMsg.length > 0) {
             err = (
                 <span style={errorStyle}>
-                    <FormattedMessage id="server-error"/>
+                    <FormattedMessage id="server-error" />
                 </span>
             )
         }
 
         return (
-            <div style={{padding: '0em 0em 0.5em 0em'}} >
+            <div style={{padding: '0em 0em 0.5em 0em'}}>
                 {err}
                 {results}
             </div>
         )
     }
-
 }
 
 FilterableEventTable.propTypes = {
@@ -93,18 +95,26 @@ FilterableEventTable.propTypes = {
     apiErrorMsg: PropTypes.string,
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {
-        changeSortOrder: (sortBy, sortByBeforeChange, orderBeforeChange, paginationPage, user) => {
+        changeSortOrder: (
+            sortBy,
+            sortByBeforeChange,
+            orderBeforeChange,
+            paginationPage,
+            user
+        ) => {
             // sortBy = API field name
             let newOrder = ''
 
             // Check if sortBy column changed
             if (sortBy !== sortByBeforeChange) {
                 // .. yes, sortBy changed
-                if (sortBy === 'name') { // If we clicked "name" column then default sort order is ascending
+                if (sortBy === 'name') {
+                    // If we clicked "name" column then default sort order is ascending
                     newOrder = 'asc'
-                } else { //otherwise default sort order for new column is descending
+                } else {
+                    //otherwise default sort order for new column is descending
                     newOrder = 'desc'
                 }
             } else {
@@ -129,5 +139,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 const mapStateToProps = () => ({})
-// TODO: if leave null, react-intl not refresh. Replace this with better React context
-export default connect(mapStateToProps, mapDispatchToProps)(FilterableEventTable)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FilterableEventTable)

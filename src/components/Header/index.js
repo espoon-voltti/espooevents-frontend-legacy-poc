@@ -9,6 +9,7 @@ import {withRouter} from 'react-router'
 
 import {login, logout, loggedInUser} from 'src/actions/user.js'
 import {setLocale as setLocaleAction} from 'src/actions/userLocale'
+import {makeLoginVisible} from 'src/actions/app'
 
 import {FormattedMessage} from 'react-intl'
 
@@ -23,12 +24,9 @@ import {
     Drawer,
 } from 'material-ui'
 // Material-ui Icons
-import List from 'material-ui-icons/List'
-import Search from 'material-ui-icons/Search'
 import Add from 'material-ui-icons/Add'
 import MenuIcon from 'material-ui-icons/Menu'
 import Language from 'material-ui-icons/Language'
-import HelpOutline from 'material-ui-icons/HelpOutline'
 import Person from 'material-ui-icons/Person'
 
 import {Link} from 'react-router-dom'
@@ -37,6 +35,10 @@ import CONSTANTS from '../../constants'
 import cityOfEspooLogo from '../../assets/images/espoo-logo.svg'
 
 class HeaderBar extends React.Component {
+    static contextTypes = {
+        dispatch: PropTypes.func,
+    }
+
     state = {
         navBarOpen: false,
     }
@@ -52,6 +54,10 @@ class HeaderBar extends React.Component {
     getNavigateMobile = navigate => () => {
         navigate()
         this.toggleNavbar()
+    }
+
+    dispatchLoginVisible = () => {
+        this.context.dispatch(makeLoginVisible())
     }
 
     render() {
@@ -88,13 +94,13 @@ class HeaderBar extends React.Component {
                                 </Select>
                             </div>
                         </div>
-                        {loggedInUser() ? (
+                        {user ? (
                             <Button onClick={() => logout()}>
                                 <Person />
                                 <FormattedMessage id="logout" />
                             </Button>
                         ) : (
-                            <Button onClick={() => login()}>
+                            <Button onClick={() => this.dispatchLoginVisible()}>
                                 <Person />
                                 <FormattedMessage id="login" />
                             </Button>

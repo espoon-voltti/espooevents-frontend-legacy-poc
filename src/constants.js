@@ -1,5 +1,4 @@
 const constants = {
-
     APP_SET_FLASHMSG: 'APP_SET_FLASHMSG',
     APP_CLEAR_FLASHMSG: 'APP_CLEAR_FLASHMSG',
     APP_CONFIRM_ACTION: 'APP_CONFIRM_ACTION',
@@ -68,7 +67,10 @@ const constants = {
         LOCALE_SET: 'LOCALE_SET',
         LOCALE_RESET: 'LOCALE_RESET',
     },
-    
+
+    DISPLAY_LOGIN: 'DISPLAY_LOGIN',
+    HIDE_LOGIN: 'HIDE_LOGIN',
+
     // Local storage keys
     EDITOR_VALUES: 'EDITOR_VALUES',
 
@@ -115,7 +117,7 @@ const constants = {
         IS_DATE: 'isDate',
         IS_TIME: 'isTime',
         IS_INT: 'isInt',
-        LONG_STRING:'longString',
+        LONG_STRING: 'longString',
         MEDIUM_STRING: 'mediumString',
         SHORT_STRING: 'shortString',
         HAS_PRICE: 'hasPrice',

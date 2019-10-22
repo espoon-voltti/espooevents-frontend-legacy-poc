@@ -484,7 +484,6 @@ export function sendData(updateExisting = false, publicationStatus) {
 export function sendDataComplete(json, action) {
     return dispatch => {
         if (json.apiErrorMsg) {
-            console.log('The api returned json', json)
             dispatch(setFlashMsg(json.apiErrorMsg, 'error', json))
             dispatch({
                 type: constants.EDITOR_SENDDATA_ERROR,
@@ -679,7 +678,6 @@ export function cancelEvent(eventId, user, values) {
             body: JSON.stringify(data),
         })
             .then(response => {
-                //console.log('Received', response)
                 let jsonPromise = response.json()
 
                 jsonPromise.then(json => {
