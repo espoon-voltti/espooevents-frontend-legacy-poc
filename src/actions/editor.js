@@ -679,7 +679,6 @@ export function cancelEvent(eventId, user, values) {
             body: JSON.stringify(data),
         })
             .then(response => {
-                //console.log('Received', response)
                 let jsonPromise = response.json()
 
                 jsonPromise.then(json => {

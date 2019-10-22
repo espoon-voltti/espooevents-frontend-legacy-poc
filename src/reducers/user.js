@@ -7,7 +7,6 @@ function tryFetchingUserFromLocalStorage() {
     try {
         user = localStorage.getItem('user')
         user = JSON.parse(user)
-        console.log('User:', user)
     } catch (e) {
         return null
     }

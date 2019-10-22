@@ -21,7 +21,6 @@ export function clearUserData() {
 function saveUserToLocalStorage(user) {
     console.log('save')
     let modifiedUser = Object.assign({}, user)
-
     let expiryDate = new Date()
     let expiryTime = appSettings.local_storage_user_expiry_time || 12
     expiryDate.setHours(expiryDate.getHours() + expiryTime)
@@ -100,4 +99,3 @@ export function logout() {
 export function loggedInUser() {
     return localStorage.getItem('apikey') ? true : false
 }
-
