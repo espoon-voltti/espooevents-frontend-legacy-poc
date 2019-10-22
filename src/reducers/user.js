@@ -7,7 +7,6 @@ function tryFetchingUserFromLocalStorage() {
     try {
         user = localStorage.getItem('user')
         user = JSON.parse(user)
-        console.log('User:', user)
     } catch (e) {
         return null
     }
@@ -37,7 +36,6 @@ function update(state = initialState, action) {
     switch (action.type) {
         // Login
         case constants.RECEIVE_USERDATA:
-            console.log('User data', action.payload)
             if (action.payload && action.payload.id) {
                 return Object.assign({}, action.payload)
             } else {

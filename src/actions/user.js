@@ -19,7 +19,6 @@ export function clearUserData() {
 
 // Adds an expiration time for user and saves it to localStorage.
 function saveUserToLocalStorage(user) {
-    console.log('save')
     let modifiedUser = Object.assign({}, user)
 
     let expiryDate = new Date()
@@ -39,7 +38,6 @@ export function retrieveUserFromSession() {
                 return response.json()
             })
             .then(user => {
-                console.log('retrieve')
                 if (user.token) {
                     const settings = {
                         headers: {

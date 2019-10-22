@@ -41,7 +41,7 @@ import {mapAPIDataToUIFormat, mapUIDataToAPIFormat} from '../../utils/formDataMa
 export class EditorPage extends React.Component {
     constructor(props) {
         super(props)
-        
+
         this.handler = (ev) => {
             ev.preventDefault();
             if (this.state.isDirty) {
@@ -203,7 +203,6 @@ export class EditorPage extends React.Component {
     }
 
     goToPreview(event) {
-    // console.log(event)
     }
 
     // action: either 'delete' or 'cancel'
@@ -339,7 +338,7 @@ const mapDispatchToProps = (dispatch) => ({
     fetchSubEvents: (eventId, user) => dispatch(fetchSubEventsAction(eventId, user)),
     clearData: () => dispatch(clearDataAction()),
     setValidationErrors: (errors) => dispatch(setValidationErrorsAction(errors)),
-    sendData: (updateExisting, publicationStatus) => 
+    sendData: (updateExisting, publicationStatus) =>
         dispatch(sendDataAction(updateExisting, publicationStatus)),
     confirm: (msg, style, actionButtonLabel, data) => dispatch(confirmAction(msg, style, actionButtonLabel, data)),
     deleteEvent: (eventId, user, values) => dispatch(deleteEventAction(eventId, user, values)),
