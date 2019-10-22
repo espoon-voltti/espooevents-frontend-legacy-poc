@@ -35,14 +35,14 @@ class FilterableEventTable extends React.Component {
 
             results = (
                 <div>
-                    <EventTable 
-                        events={this.props.events} 
-                        getNextPage={getNextPage} 
-                        filterText={''} 
-                        sortBy={this.props.sortBy} 
-                        sortOrder={this.props.sortOrder} 
-                        user={this.props.user} 
-                        count={this.props.count} 
+                    <EventTable
+                        events={this.props.events}
+                        getNextPage={getNextPage}
+                        filterText={''}
+                        sortBy={this.props.sortBy}
+                        sortOrder={this.props.sortOrder}
+                        user={this.props.user}
+                        count={this.props.count}
                         changeSortOrder={this.props.changeSortOrder}
                         changePaginationPage={this.props.changePaginationPage}
                         paginationPage={this.props.paginationPage}
@@ -53,7 +53,8 @@ class FilterableEventTable extends React.Component {
                 </div>
             )
         } else {
-            results = <FormattedMessage id="organization-events-no-results"/>
+            // results = <FormattedMessage id="organization-events-no-results"/>
+            results = <div>Ei tapahtumia</div>
         }
 
         let err = ''
