@@ -1,37 +1,195 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
 version: 2
-jobs:
-  build:
+
+aliases:
+  - &workspace_root ~/repo
+
+  - &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+  - &build_container_config
     docker:
-      # specify the version you desire here
-      - image: circleci/node:8.10
+      - image: circleci/node:12
+    working_directory: *workspace_root
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+  - &deploy_helper_container_config
+    docker:
+      - image: 307238562370.dkr.ecr.eu-west-1.amazonaws.com/voltti/builder-aws:master
+    working_directory: *workspace_root
 
-    working_directory: ~/repo
+  - &repo_cache_key v2-repo-{{ .Branch }}-{{ .Revision }}
 
+  - &restore_repo
+    restore_cache:
+      keys:
+        - *repo_cache_key
+
+  - &bootstrap_deps
+    run:
+      name: Bootstrap dependencies
+      command: |
+        set -exu
+        yarn install --frozen-lockfile
+  - &deps_cache_key >-
+    v1-deps
+    {{ checksum "package.json" }}-{{ checksum "yarn.lock" }}
+
+  - &restore_deps
+    restore_cache:
+      keys:
+        - *deps_cache_key
+
+  - &deploy
+    <<: *deploy_helper_container_config
+    steps:
+      - *attach_workspace
+      - run:
+          name: Deploy app to $TARGET_ENV
+          command: |
+            replace-credentials
+            aws s3 sync ./dist s3://espooevents-static-$TARGET_ENV/ \
+              --delete \
+              --acl public-read \
+              --profile voltti-$TARGET_ENV
+
+jobs:
+  checkout_code:
+    <<: *build_container_config
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: yarn install
-
       - save_cache:
+          key: *repo_cache_key
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - .
 
-      # run tests!
+  install_deps:
+    <<: *build_container_config
+    steps:
+      - *restore_repo
+      - *restore_deps
+      - run:
+          name: Add .npmrc
+          command: |
+            cat << EOF > .npmrc
+            @voltti:registry=https://npm.sst.espoon-voltti.fi/
+            //npm.sst.espoon-voltti.fi/:_authToken="$(echo $VERDACCIO_TOKEN)"
+            //npm.sst.espoon-voltti.fi/:always-auth=true
+            EOF
+      - *bootstrap_deps
+      - save_cache:
+          key: *deps_cache_key
+          paths:
+            - ~/.cache/yarn
+
+  build:
+    <<: *build_container_config
+    environment:
+      api_base: 'http://ec2-18-202-226-156.eu-west-1.compute.amazonaws.com:8000/v1'
+      local_storage_user_expiry_time: 48
+      nocache: true
+      raven_id: false
+    steps:
+      - *restore_repo
+      - *restore_deps
+      - *bootstrap_deps
+      - run: yarn build
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - ./dist
+
+  test:
+    <<: *build_container_config
+    steps:
+      - *restore_repo
+      - *restore_deps
+      - *bootstrap_deps
       - run: yarn test
+
+  lint:
+    <<: *build_container_config
+    steps:
+      - *restore_repo
+      - *restore_deps
+      - *bootstrap_deps
+      - run: yarn lint
+
+  deploy_dev:
+    <<: *deploy
+    environment:
+      TARGET_ENV: dev
+
+  deploy_test:
+    <<: *deploy
+    environment:
+      TARGET_ENV: test
+
+  deploy_staging:
+    <<: *deploy
+    environment:
+      TARGET_ENV: staging
+
+  deploy_prod:
+    <<: *deploy
+    environment:
+      TARGET_ENV: prod
+
+workflows:
+  version: 2
+  build_test_and_deploy:
+    jobs:
+      - checkout_code
+      - install_deps:
+          requires:
+            - checkout_code
+      - lint:
+          requires:
+            - install_deps
+      - test:
+          requires:
+            - install_deps
+      - build:
+          requires:
+            # - test
+            - lint
+
+      # deploy user frontend
+      - deploy_dev:
+          context: org-global
+          requires:
+            - build
+      - deploy_test:
+          context: org-global
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - approve_staging_deploy:
+          type: approval
+          requires:
+            - deploy_test
+          filters:
+            branches:
+              only: master
+      - deploy_staging:
+          context: org-global
+          requires:
+            - approve_staging_deploy
+          filters:
+            branches:
+              only: master
+      - approve_prod_deploy:
+          type: approval
+          requires:
+            - deploy_staging
+          filters:
+            branches:
+              only: master
+      - deploy_prod:
+          context: org-global
+          requires:
+            - approve_prod_deploy
+          filters:
+            branches:
+              only: master
