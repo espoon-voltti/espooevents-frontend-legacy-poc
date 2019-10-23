@@ -145,7 +145,7 @@ workflows:
             - install_deps
       - build:
           requires:
-            - test
+            # - test
             - lint
 
       # deploy user frontend
